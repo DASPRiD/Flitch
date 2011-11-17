@@ -71,9 +71,7 @@ class LineEndings implements Rule
             if (preg_match('((\r?\n|\r)$)', $line, $matches)) {
                 if ($matches[1] !== $eolChar) {
                     $file->addError(new Error(
-                        $lineNo,
-                        0,
-                        Error::SEVERITY_ERROR,
+                        $lineNo, 0, Error::SEVERITY_ERROR,
                         sprintf('Line must end with "%s"', $eolName),
                         $this
                     ));

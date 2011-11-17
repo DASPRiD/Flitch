@@ -49,17 +49,13 @@ class MaxLineLength implements Rule
         foreach ($file->getLines() as $lineNo => $line) {
             if (iconv_strlen($line, 'utf-8') > $hardLimit) {
                 $file->addError(new Error(
-                    $lineNo,
-                    0,
-                    Error::SEVERITY_ERROR,
+                    $lineNo, 0, Error::SEVERITY_ERROR,
                     sprintf('Line may not be longer than %d characters', $hardLimit),
                     $this
                 ));
             } elseif (iconv_strlen($line, 'utf-8') > $softLimit) {
                 $file->addError(new Error(
-                    $lineNo,
-                    0,
-                    Error::SEVERITY_WARNING,
+                    $lineNo, 0, Error::SEVERITY_WARNING,
                     sprintf('Line should not be longer than %d characters', $softLimit),
                     $this
                 ));
