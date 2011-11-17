@@ -45,7 +45,13 @@ class NoShortOpenTags implements Rule
     {
         foreach ($file->find(T_OPEN_TAG) as $token) {
             if ($token->getLexeme() !== '<' . '?php') {
-                $file->addError($token->getLine(), 'Short open tags are not allowed');
+                $file->addError(new Error(
+                    $token->getLine(),
+                    $token->getColumn(),
+                    Error::SEVERITY_ERROR,
+                    'Short open tags are not allowed',
+                    $this
+                ));
             }    
         }
     }

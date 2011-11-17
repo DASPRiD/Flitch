@@ -45,7 +45,13 @@ class NoWhitespaceAtEndOfLine implements Rule
     {
         foreach ($file->getLines() as $lineNo => $line) {
             if (preg_match('([ \t]+(\r?\n|\r)$)', $line)) {
-                $file->addError($lineNo, 'Line contains trailing whitespace');
+                $file->addError(new Error(
+                    $lineNo,
+                    0,
+                    Error::SEVERITY_ERROR,
+                    'Line contains trailing whitespace',
+                    $this
+                ));
             }
         }
     }

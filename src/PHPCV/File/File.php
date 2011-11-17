@@ -117,16 +117,12 @@ class File implements ArrayAccess
     /**
      * Add an error to the file.
      * 
-     * @param  integer $line
-     * @param  integer $column
-     * @param  integer $severity
-     * @param  string  $message
-     * @param  Rule    $source
+     * @param  Error $error
      * @return void
      */
-    public function addError($line, $column = 0, $severity, $message, Rule $source)
+    public function addError(Error $error)
     {
-        $this->errors[] = new Error($line,  $column, $severity, $message, $source);
+        $this->errors[] = $error;
     }
     
     /**

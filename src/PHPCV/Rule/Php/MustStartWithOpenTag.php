@@ -44,7 +44,13 @@ class MustStartWithOpenTag implements Rule
     public function check(File $file, array $options = array())
     {
         if ($file[0]->getType() !== T_OPEN_TAG) {
-            $file->addError(1, 'File must start with an open tag');
+            $file->addError(new Error(
+                1,
+                1,
+                Error::SEVERITY_ERROR,
+                'File must start with an open tag',
+                $this
+            ));
         }
     }
 }
