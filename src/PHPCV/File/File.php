@@ -66,13 +66,6 @@ class File implements ArrayAccess
     protected $errors = array();
     
     /**
-     * Warnings in this file.
-     * 
-     * @var array
-     */
-    protected $warnings = array();
-    
-    /**
      * Create a new file representation.
      * 
      * @param  string $filename
@@ -124,53 +117,42 @@ class File implements ArrayAccess
     /**
      * Add an error to the file.
      * 
-     * @param  integer $lineNo
+     * @param  integer $line
+     * @param  integer $column
+     * @param  integer $severity
      * @param  string  $message
+     * @param  Rule    $source
      * @return void
      */
-    public function addError($lineNo, $message)
+    public function addError($line, $column = 0, $severity, $message, Rule $source)
     {
-        $this->errors[] = array(
-            'lineNo'  => $lineNo,
-            'message' => $message
-        );
+        $this->errors[] = new Error($line,  $column, $severity, $message, $source);
     }
     
     /**
      * Get all produced errors.
      * 
+     * Errors will be sorted by line/column before being returned.
+     * 
      * @return array
      */
     public function getErrors()
     {
+        usort($this->errors, function(Error $a, Error $b) {
+            if ($a->getLine() === $b->getLine()) {
+                if ($a->getColumn() === $b->getColumn()) {
+                    return 0;
+                }
+                
+                return ($a->getColumn() < $b->getColumn() ? -1 : 1);
+            }
+            
+            return ($a->getLine() < $b->getLine() ? -1 : 1);
+        });
+        
         return $this->errors;
     }
-    
-    /**
-     * Add a warning to the file.
-     * 
-     * @param  integer $lineNo
-     * @param  string  $message
-     * @return void
-     */
-    public function addWarning($lineNo, $message)
-    {
-        $this->warnings[] = array(
-            'lineNo'  => $lineNo,
-            'message' => $message
-        );
-    }
-    
-    /**
-     * Get all produced warnings.
-     * 
-     * @return array
-     */
-    public function getWarnings()
-    {
-        return $this->warnings;
-    }
-    
+
     /**
      * offsetExists(): defined by ArrayAccess interface.
      * 

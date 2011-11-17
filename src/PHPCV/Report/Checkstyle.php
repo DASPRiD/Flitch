@@ -71,15 +71,15 @@ class Checkstyle implements Report
         foreach ($file->getErrors() as $error) {
             $this->writer->startElement('error');
         
-            $this->writer->writeAttribute('line', $file->getLine());
+            $this->writer->writeAttribute('line', $error->getLine());
                         
             if ($error->getColumn() > 0) {
-                $this->writer->writeAttribute('column', $file->getColumn());
+                $this->writer->writeAttribute('column', $error->getColumn());
             }
             
-            $this->writer->writeAttribute('severity', $file->getSeverity());
-            $this->writer->writeAttribute('message', $file->getMessage());
-            $this->writer->writeAttribute('source', $file->getSource());
+            $this->writer->writeAttribute('severity', $error->getSeverity());
+            $this->writer->writeAttribute('message', $error->getMessage());
+            $this->writer->writeAttribute('source', $error->getSource());
             
             $this->writer->endElement();
         }
