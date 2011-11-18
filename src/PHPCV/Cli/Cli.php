@@ -50,11 +50,11 @@ class Cli
     protected $standard = 'ZF2';
     
     /**
-     * Path to scan.
+     * Paths to scan.
      * 
-     * @var string
+     * @var array
      */
-    protected $path;
+    protected $paths = array();
     
     /**
      * Create a new CLI object.
@@ -68,7 +68,7 @@ class Cli
     }
     
     /**
-     * Run ZFCS.
+     * Run PHPCV.
      * 
      * @param  array $arguments
      * @return void
@@ -77,7 +77,49 @@ class Cli
     {
         echo "PHPCV " . Version::getVersion() . " by Ben Scholzen.\n\n";
         
-        $method = $this->parseCommandLineArguments($arguments);
+        $parser = new ArgumentParser($arguments, array(
+            array(
+                'code'    => 's',
+                'name'    => 'standard',
+                'has_arg' => true
+            ),
+            array(
+                'code'    => 'h',
+                'name'    => 'help',
+                'has_arg' => false
+            ),
+            array(
+                'code'    => 'v',
+                'name'    => 'version',
+                'has_arg' => false
+            ),
+        ));
+        
+        if ($parser->getError() !== null) {
+            echo $parser->getError() . "\n";
+            return;
+        }
+        
+        $method  = 'analyzeFiles';
+        
+        foreach ($parser->getOptions() as $option) {
+            switch ($option['code']) {
+                case 's':
+                    $this->standard = $option['argument'];
+                    break;
+                
+                case 'h':
+                    $method = 'printHelp';
+                    break;
+                
+                case 'v':
+                    return;
+            }
+        }
+        
+        foreach ($parser->getNonOptions() as $nonOption) {
+            $this->paths[] = $nonOption;
+        }
         
         $this->{$method}();
     }
@@ -89,34 +131,46 @@ class Cli
      */
     protected function analyzeFiles()
     {
-        if ($this->path === null) {
+        if (!$this->paths) {
             $this->printHelp();
             return;
         }
-                
-        if (!file_exists($this->path) || !is_readable($this->path)) {
-            echo "Cannot open " . $this->path . "\n";
-        }
+
+        $paths = array();
         
-        $iterator = new RegexIterator(
-            new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($this->path)
-            ),
-            '(\.php$)i'
-        );
-               
+        foreach ($this->paths as $path) {
+            if (!file_exists($path) || !is_readable($path)) {
+                echo "Cannot open " . $path . "\n";
+            }
+            
+            if (is_dir($path)) {
+                $paths[] = new RegexIterator(
+                    new RecursiveIteratorIterator(
+                        new RecursiveDirectoryIterator($this->path)
+                    ),
+                    '(\.php$)i'
+                );
+            } else {
+                $paths[] = $path;
+            }
+        }
+
         $manager   = new Manager(__DIR__ . '/../../../standards', '~/.phpcv/standards', $this->standard);
         $tokenizer = new Tokenizer();
-        
-        foreach ($iterator as $fileInfo) {
-            $file = $tokenizer->tokenize($fileInfo->getFilename(), file_get_contents($fileInfo->getPathname()));
-            
-            $manager->check($file);
-            
-            echo '.';
+
+        foreach ($paths as $path) {
+            if (is_string($path)) {
+                $file = $tokenizer->tokenize($path, file_get_contents($path));
+                
+                $manager->check($file);
+            } else {
+                foreach ($iterator as $fileInfo) {
+                    $file = $tokenizer->tokenize($fileInfo->getPathname(), file_get_contents($fileInfo->getPathname()));
+
+                    $manager->check($file);
+                }
+            }
         }
-        
-        echo "\n";
     }
     
     /**
@@ -128,86 +182,8 @@ class Cli
     {
         echo "Usage: phpcv [switches] <directory>\n"
            . "       phpcv [switches] <file>\n\n"
-           . "  -s, --standard=STANDARD  Use specified coding standard\n"
-           . "  -h, --help               Prints this usage information\n";
-    }
-    
-    /**
-     * Parse command line arguments.
-     * 
-     * @param  array $arguments
-     * @return string 
-     */
-    protected function parseCommandLineArguments(array $arguments)
-    {
-        $method = 'analyzeFiles';
-        
-        array_shift($arguments);
-        
-        while (count($arguments) > 0) {
-            $argument = array_shift($arguments);
-            
-            if (substr($argument, 0, 2) === '--') {
-                $argument = explode('=', substr(ltrim($argument), 2));
-                $flag     = $argument[0];
-                $value    = (isset($argument[1]) ? $argument[1] : null);
-                
-                switch ($flag) {
-                    case 'help':
-                        $method = 'printHelp';
-                        break;
-                    
-                    case 'standard':
-                        $this->standard = $value;
-                        break;
-                    
-                    default:
-                        $method = 'printHelp';
-                        break;
-                }
-            } elseif (substr($argument, 0, 1) === '-') {
-                $flag = substr($argument, 1);
-                
-                switch ($flag) {
-                    case 'h':
-                        $method = 'printHelp';
-                        break;
-                    
-                    case 's':
-                        if (count($arguments) > 0) {
-                            $this->standard = array_unshift($arguments);
-                        } else {
-                            $method = 'printHelp';
-                        }
-                        break;
-                    
-                    default:
-                        $method = 'printHelp';
-                        break;
-                }
-            } else {
-                $this->path = rtrim($argument, '/\\');
-                break;
-            }
-        }
-        
-        return $method;
-    }
-    
-    /**
-     * Check if a given path is absolute.
-     * 
-     * @param  string $path
-     * @return boolean
-     */
-    protected function isAbsolute($path)
-    {
-        if (preg_match('((?:/|\\\\)\.\.(?=/|$))', $path)) {
-            return false;
-        } elseif (!strncasecmp(PHP_OS, 'win', 3)) {
-            return ($path[0] === '/' || preg_match('(^[a-zA-Z]:(\\\\|/))', $path));
-        } else {
-            return ($path[0] === '/' || $path[0] === '~');
-        }
+           . "  -s, --standard=STANDARD Use specified coding standard\n"
+           . "  -h, --help              Prints this usage information\n"
+           . "  -v, --version           Print version information\n";
     }
 }
