@@ -11,20 +11,23 @@
  * to mail@dasprids.de so I can send you a copy immediately.
  *
  * @category   Flitch
+ * @package    Flitch\Exception
  * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
  * @license    New BSD License
  */
 
-return function ($class) {
-    static $map;
-    
-    if (!$map) {
-        $map = include __DIR__ . '/autoload_classmap.php';
-    }
+namespace Flitch\Exception;
 
-    if (!isset($map[$class])) {
-        return false;
-    }
-    
-    return include $map[$class];
-};
+use Flitch\Exception;
+
+/**
+ * Runtime exception.
+ * 
+ * @category   Flitch
+ * @package    Flitch\Exception
+ * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
+ * @license    New BSD License
+ */
+class RuntimeException extends \RuntimeException implements Exception
+{
+}

@@ -11,20 +11,30 @@
  * to mail@dasprids.de so I can send you a copy immediately.
  *
  * @category   Flitch
+ * @package    Flitch_Report
  * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
  * @license    New BSD License
  */
 
-return function ($class) {
-    static $map;
-    
-    if (!$map) {
-        $map = include __DIR__ . '/autoload_classmap.php';
-    }
+namespace Flitch\Report;
 
-    if (!isset($map[$class])) {
-        return false;
-    }
-    
-    return include $map[$class];
-};
+use Flitch\File\File;
+
+/**
+ * Report interface.
+ * 
+ * @category   Flitch
+ * @package    Flitch_Checkstyle
+ * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
+ * @license    New BSD License
+ */
+interface Report
+{
+    /**
+     * Add a file to the report.
+     * 
+     * @param  File $file
+     * @return void
+     */
+    public function addFile(File $file);
+}

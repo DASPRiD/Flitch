@@ -11,20 +11,21 @@
  * to mail@dasprids.de so I can send you a copy immediately.
  *
  * @category   Flitch
+ * @package    Flitch
  * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
  * @license    New BSD License
  */
 
-return function ($class) {
-    static $map;
-    
-    if (!$map) {
-        $map = include __DIR__ . '/autoload_classmap.php';
-    }
+namespace Flitch;
 
-    if (!isset($map[$class])) {
-        return false;
-    }
-    
-    return include $map[$class];
-};
+/**
+ * Exception marker interface.
+ * 
+ * @category   Flitch
+ * @package    Flitch
+ * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
+ * @license    New BSD License
+ */
+interface Exception
+{
+}

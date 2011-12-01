@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPCV
+ * Flitch
  *
  * LICENSE
  *
@@ -10,7 +10,7 @@
  * obtain it through the world-wide-web, please send an email
  * to mail@dasprids.de so I can send you a copy immediately.
  *
- * @category   PHPCV
+ * @category   Flitch
  * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
  * @license    New BSD License
  */

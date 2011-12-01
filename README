@@ -1,9 +1,9 @@
-PHPCV - PHP coding standard validator
+Flitch - PHP coding standard validator
 =====================================
 
-PHPCV will scan through your source files and detect coding standard violations. 
+Flitch will scan through your source files and detect coding standard violations. 
 Currently it ships with ZF2 as core standard, but can be extended by custom
-standards. Those standards should be located in the directory .phpcv/standards
+standards. Those standards should be located in the directory .flitch/standards
 in your home directory.
 
-For command line options, run phpcv --help
+For command line options, run flitch --help

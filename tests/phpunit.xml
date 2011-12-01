@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="bootstrap.php">
-    <testsuite name="PHPCV">
+    <testsuite name="Flitch">
         <directory>./</directory>
     </testsuite>
 </phpunit>
