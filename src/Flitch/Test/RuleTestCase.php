@@ -33,27 +33,26 @@ use PHPUnit_Framework_TestCase as TestCase,
 class RuleTestCase extends TestCase
 {
     /**
-     * Assert a specific set of errors.
+     * Assert a specific set of violations.
      * 
      * @param  File  $file
-     * @param  array $expectedErrors
+     * @param  array $expectedViolations
      * @return void
      */
-    public function assertRuleErrors(File $file, array $expectedErrors)
+    public function assertRuleViolations(File $file, array $expectedViolations)
     {
-        // Get all errors and convert them to an array for comparision.
-        $errors = array();
+        // Get all violations and convert them to an array for comparision.
+        $violations = array();
         
-        foreach ($file->getErrors() as $error) {
-            $errors[] = array(
+        foreach ($file->getViolations() as $error) {
+            $violations[] = array(
                 'line'     => $error->getLine(),
                 'column'   => $error->getColumn(),
-                'severity' => $error->getSeverityName(),
                 'message'  => $error->getMessage(),
                 'source'   => $error->getSource()
             );
         }
         
-        $this->assertEquals($expectedErrors, $errors);
+        $this->assertEquals($expectedViolations, $violations);
     }
 }

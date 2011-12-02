@@ -17,11 +17,11 @@
  * @license    New BSD License
  */
 
-namespace FlitchTest\Rule\File;
+namespace FlitchTest\Rule\Line;
 
 use Flitch\Test\RuleTestCase,
     Flitch\File\File,
-    Flitch\Rule\File\MaxLineLength;
+    Flitch\Rule\Line\MaxLength;
 
 /**
  * @category   Flitch
@@ -30,7 +30,7 @@ use Flitch\Test\RuleTestCase,
  * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
  * @license    New BSD License
  */
-class MaxLineLengthTest extends RuleTestCase
+class MaxLengthTest extends RuleTestCase
 {
     /**
      * @var File
@@ -41,69 +41,71 @@ class MaxLineLengthTest extends RuleTestCase
     {
         $this->file = new File(
             'foo.php',
-            "<?php" . str_repeat(' ', 120) . "\n" . str_repeat(' ', 81)
+            "<?php" . str_repeat(' ', 120)
         );
     }
     
     public function testDefaultLimits()
     {
-        $rule = new MaxLineLength();
+        $rule = new MaxLength();
         $rule->check($this->file);
         
-        $this->assertRuleErrors($this->file, array(
+        $this->assertRuleViolations($this->file, array(
             array(
                 'line'     => 1,
                 'column'   => 0,
-                'severity' => 'error',
-                'message'  => 'Line may not be longer than 120 characters',
-                'source'   => 'Flitch\File\MaxLineLength'
-            ),
-            array(
-                'line'     => 2,
-                'column'   => 0,
-                'severity' => 'warning',
-                'message'  => 'Line should not be longer than 80 characters',
-                'source'   => 'Flitch\File\MaxLineLength'
+                'message'  => 'Line may not be longer than 80 characters',
+                'source'   => 'Flitch\Line\MaxLength'
             ),
         ));
     }
     
     public function testCustomLimits()
     {
-        $rule = new MaxLineLength();
-        $rule->check($this->file, array(
-            'hard-limit' => 80,
-            'soft-limit' => 40
-        ));
+        $rule = new MaxLength();
+        $rule->setLimit(120);
+        $rule->check($this->file);
         
-        $this->assertRuleErrors($this->file, array(
+        $this->assertRuleViolations($this->file, array(
             array(
                 'line'     => 1,
                 'column'   => 0,
-                'severity' => 'error',
-                'message'  => 'Line may not be longer than 80 characters',
-                'source'   => 'Flitch\File\MaxLineLength'
-            ),
-            array(
-                'line'     => 2,
-                'column'   => 0,
-                'severity' => 'error',
-                'message'  => 'Line may not be longer than 80 characters',
-                'source'   => 'Flitch\File\MaxLineLength'
+                'message'  => 'Line may not be longer than 120 characters',
+                'source'   => 'Flitch\Line\MaxLength'
             ),
         ));
     }
     
-    public function testProperHandlingWithUtf8Characters()
+    public function testHandlingOfTabs()
+    {
+        $file = new File(
+            'foo.php',
+            "<?php\n//" . str_repeat('\t', 75)
+        );
+        
+        $rule = new MaxLength();
+        $rule->check($file);
+        
+        $this->assertRuleViolations($file, array(
+            array(
+                'line'     => 2,
+                'column'   => 0,
+                'message'  => 'Line may not be longer than 80 characters',
+                'source'   => 'Flitch\Line\MaxLength'
+            ),
+        ));
+    }
+    
+    public function testHandlingOfMultibyteCharacters()
     {
         $file = new File(
             'foo.php',
             "<?php\n//" . str_repeat('ü', 75)
         );
         
-        $rule = new MaxLineLength();
+        $rule = new MaxLength();
         $rule->check($file);
         
-        $this->assertRuleErrors($file, array());
+        $this->assertRuleViolations($file, array());
     }
 }

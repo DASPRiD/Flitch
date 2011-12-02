@@ -21,14 +21,14 @@ namespace Flitch\File;
 use Flitch\Rule\Rule;
 
 /**
- * Error representation.
+ * Violation representation.
  * 
  * @category   Flitch
  * @package    Flitch_File
  * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
  * @license    New BSD License
  */
-class Error
+class Violation
 {
     /**#@+
      * Severities.
@@ -75,23 +75,17 @@ class Error
     protected $source;
     
     /**
-     * Create a new error.
+     * Create a new violation.
      * 
      * @param  integer $line
      * @param  integer $column
      * @param  integer $severity
      * @param  string  $message
-     * @param  Rule    $source 
+     * @param  string  $source 
      * @return void
      */
-    public function __construct($line, $column, $severity, $message, Rule $source)
-    {
-        $source = get_class($source);
-        
-        if (strpos($source, 'Flitch\\Rule\\') === 0) {
-            $source = 'Flitch\\' . substr($source, strlen('Flitch\\Rule\\'));
-        }
-        
+    public function __construct($line, $column, $severity, $message, $source)
+    {       
         $this->line     = (int) $line;
         $this->column   = (int) $column;
         $this->severity = min(3, max(0, (int) $severity));
@@ -169,5 +163,30 @@ class Error
     public function getSource()
     {
         return $this->source;
+    }
+    
+    /**
+     * Get severity from a string.
+     * 
+     * @param  string $severity
+     * @return integer
+     */
+    public static function getSeverityFromString($severity)
+    {
+        switch ($severity) {
+            case 'ignore':
+                return self::SEVERITY_IGNORE;
+                
+            case 'info':
+                return self::SEVERITY_INFO;
+                
+            case 'warning':
+                return self::SEVERITY_WARNING;
+                
+            case 'error':
+                return self::SEVERITY_ERROR;
+        }
+        
+        return null;
     }
 }

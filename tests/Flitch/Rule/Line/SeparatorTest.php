@@ -17,11 +17,11 @@
  * @license    New BSD License
  */
 
-namespace FlitchTest\Rule\File;
+namespace FlitchTest\Rule\Line;
 
 use Flitch\Test\RuleTestCase,
     Flitch\File\File,
-    Flitch\Rule\File\LineEndings;
+    Flitch\Rule\Line\Separator;
 
 /**
  * @category   Flitch
@@ -30,7 +30,7 @@ use Flitch\Test\RuleTestCase,
  * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
  * @license    New BSD License
  */
-class LineEndingsTest extends RuleTestCase
+class SeparatorTest extends RuleTestCase
 {
     /**
      * @var File
@@ -45,119 +45,89 @@ class LineEndingsTest extends RuleTestCase
         );
     }
     
-    public function testOnlyAllowLFByDefault()
+    public function testOnlyAllowUnixByDefault()
     {
-        $rule = new LineEndings();
+        $rule = new Separator();
         $rule->check($this->file);
         
-        $this->assertRuleErrors($this->file, array(
+        $this->assertRuleViolations($this->file, array(
             array(
                 'line'     => 1,
                 'column'   => 0,
-                'severity' => 'error',
                 'message'  => 'Line must end with "\n", found "\r\n"',
-                'source'   => 'Flitch\File\LineEndings'
+                'source'   => 'Flitch\Line\Separator'
             ),
             array(
                 'line'     => 2,
                 'column'   => 0,
-                'severity' => 'error',
                 'message'  => 'Line must end with "\n", found "\r"',
-                'source'   => 'Flitch\File\LineEndings'
+                'source'   => 'Flitch\Line\Separator'
             ),
         ));
     }
     
-    public function testOnlyAllowLF()
+    public function testOnlyAllowUnix()
     {
-        $rule = new LineEndings(array(
-            'eol-char' => '\n'
-        ));
+        $rule = new Separator();
+        $rule->setEolStyle('unix');
         $rule->check($this->file);
         
-        $this->assertRuleErrors($this->file, array(
+        $this->assertRuleViolations($this->file, array(
             array(
                 'line'     => 1,
                 'column'   => 0,
-                'severity' => 'error',
                 'message'  => 'Line must end with "\n", found "\r\n"',
-                'source'   => 'Flitch\File\LineEndings'
+                'source'   => 'Flitch\Line\Separator'
             ),
             array(
                 'line'     => 2,
                 'column'   => 0,
-                'severity' => 'error',
                 'message'  => 'Line must end with "\n", found "\r"',
-                'source'   => 'Flitch\File\LineEndings'
+                'source'   => 'Flitch\Line\Separator'
             ),
         ));
     }
     
-    public function testOnlyAllowCR()
+    public function testOnlyAllowMac()
     {
-        $rule = new LineEndings();
-        $rule->check($this->file, array('eol-char' => '\r'));
+        $rule = new Separator();
+        $rule->setEolStyle('mac');
+        $rule->check($this->file);
         
-        $this->assertRuleErrors($this->file, array(
+        $this->assertRuleViolations($this->file, array(
             array(
                 'line'     => 1,
                 'column'   => 0,
-                'severity' => 'error',
                 'message'  => 'Line must end with "\r", found "\r\n"',
-                'source'   => 'Flitch\File\LineEndings'
+                'source'   => 'Flitch\Line\Separator'
             ),
             array(
                 'line'     => 3,
                 'column'   => 0,
-                'severity' => 'error',
                 'message'  => 'Line must end with "\r", found "\n"',
-                'source'   => 'Flitch\File\LineEndings'
+                'source'   => 'Flitch\Line\Separator'
             ),
         ));
     }
     
-    public function testOnlyAllowCRLF()
+    public function testOnlyAllowWindows()
     {
-        $rule = new LineEndings();
-        $rule->check($this->file, array('eol-char' => '\r\n'));
+        $rule = new Separator();
+        $rule->setEolStyle('windows');
+        $rule->check($this->file);
         
-        $this->assertRuleErrors($this->file, array(
+        $this->assertRuleViolations($this->file, array(
             array(
                 'line'     => 2,
                 'column'   => 0,
-                'severity' => 'error',
                 'message'  => 'Line must end with "\r\n", found "\r"',
-                'source'   => 'Flitch\File\LineEndings'
+                'source'   => 'Flitch\Line\Separator'
             ),
             array(
                 'line'     => 3,
                 'column'   => 0,
-                'severity' => 'error',
                 'message'  => 'Line must end with "\r\n", found "\n"',
-                'source'   => 'Flitch\File\LineEndings'
-            ),
-        ));
-    }
-    
-    public function testFallbackToLFWithInvalidEolChar()
-    {
-        $rule = new LineEndings();
-        $rule->check($this->file, array('eol-char' => 'foo'));
-        
-        $this->assertRuleErrors($this->file, array(
-            array(
-                'line'     => 1,
-                'column'   => 0,
-                'severity' => 'error',
-                'message'  => 'Line must end with "\n", found "\r\n"',
-                'source'   => 'Flitch\File\LineEndings'
-            ),
-            array(
-                'line'     => 2,
-                'column'   => 0,
-                'severity' => 'error',
-                'message'  => 'Line must end with "\n", found "\r"',
-                'source'   => 'Flitch\File\LineEndings'
+                'source'   => 'Flitch\Line\Separator'
             ),
         ));
     }

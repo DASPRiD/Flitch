@@ -34,8 +34,7 @@ interface Rule
      * Check a given file for rule violations.
      * 
      * @param  File  $file
-     * @param  array $options
      * @return void
      */
-    public function check(File $file, array $options = array());
+    public function check(File $file);
 }

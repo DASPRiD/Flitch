@@ -45,6 +45,13 @@ class File implements ArrayAccess
     protected $source;
     
     /**
+     * Encoding of the file.
+     * 
+     * @var string
+     */
+    protected $encoding;
+    
+    /**
      * Lines of the file.
      * 
      * @var array
@@ -59,23 +66,25 @@ class File implements ArrayAccess
     protected $tokens = array();
     
     /**
-     * Errors in this file.
+     * Violations in this file.
      * 
      * @var array
      */
-    protected $errors = array();
+    protected $violations = array();
     
     /**
      * Create a new file representation.
      * 
      * @param  string $filename
      * @param  string $source
+     * @param  string $encoding
      * @return void
      */
-    public function __construct($filename, $source)
+    public function __construct($filename, $source, $encoding = 'utf-8')
     {
         $this->filename = $filename;
         $this->source   = $source;
+        $this->encoding = $encoding;
         
         // Split source into line arrays, containing both content and ending.
         preg_match_all('((?<content>.*?)(?<ending>\n|\r\n?|$))', $source, $matches, PREG_SET_ORDER);
@@ -119,26 +128,36 @@ class File implements ArrayAccess
     }
     
     /**
-     * Add an error to the file.
+     * Get encoding of the file.
      * 
-     * @param  Error $error
-     * @return void
+     * @return string
      */
-    public function addError(Error $error)
+    public function getEncoding()
     {
-        $this->errors[] = $error;
+        return $this->encoding;
     }
     
     /**
-     * Get all produced errors.
+     * Add a violation to the file.
      * 
-     * Errors will be sorted by line/column before being returned.
+     * @param  Error $violation
+     * @return void
+     */
+    public function addViolation(Violation $violation)
+    {
+        $this->violations[] = $violation;
+    }
+    
+    /**
+     * Get all produced violations.
+     * 
+     * Violations will be sorted by line/column before being returned.
      * 
      * @return array
      */
-    public function getErrors()
+    public function getViolations()
     {
-        usort($this->errors, function(Error $a, Error $b) {
+        usort($this->violations, function(Violation $a, Violation $b) {
             if ($a->getLine() === $b->getLine()) {
                 if ($a->getColumn() === $b->getColumn()) {
                     return 0;
@@ -150,7 +169,7 @@ class File implements ArrayAccess
             return ($a->getLine() < $b->getLine() ? -1 : 1);
         });
         
-        return $this->errors;
+        return $this->violations;
     }
 
     /**
