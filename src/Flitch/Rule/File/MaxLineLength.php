@@ -20,7 +20,8 @@
 namespace Flitch\Rule\File;
 
 use Flitch\Rule\Rule,
-    Flitch\File\File;
+    Flitch\File\File,
+    Flitch\File\Error;
 
 /**
  * Max line length rule.
@@ -47,13 +48,13 @@ class MaxLineLength implements Rule
         $hardLimit = (isset($options['hard-limit']) ? (int) $options['hard-limit'] : 120);
         
         foreach ($file->getLines() as $lineNo => $line) {
-            if (iconv_strlen($line, 'utf-8') > $hardLimit) {
+            if (iconv_strlen($line['content'], 'utf-8') > $hardLimit) {
                 $file->addError(new Error(
                     $lineNo, 0, Error::SEVERITY_ERROR,
                     sprintf('Line may not be longer than %d characters', $hardLimit),
                     $this
                 ));
-            } elseif (iconv_strlen($line, 'utf-8') > $softLimit) {
+            } elseif (iconv_strlen($line['content'], 'utf-8') > $softLimit) {
                 $file->addError(new Error(
                     $lineNo, 0, Error::SEVERITY_WARNING,
                     sprintf('Line should not be longer than %d characters', $softLimit),
