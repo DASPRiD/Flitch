@@ -20,7 +20,8 @@
 namespace Flitch\Rule\File;
 
 use Flitch\Rule\Rule,
-    Flitch\File\File;
+    Flitch\File\File,
+    Flitch\File\Error;
 
 /**
  * Line endings rule.
@@ -64,18 +65,16 @@ class LineEndings implements Rule
                     break;
             }
         }
-        
-        $eolChar = (isset($options['eol-char']) ? $options['eol-char'] : '\n');
-        
+
         foreach ($file->getLines() as $lineNo => $line) {
-            if (preg_match('((\r?\n|\r)$)', $line, $matches)) {
-                if ($matches[1] !== $eolChar) {
-                    $file->addError(new Error(
-                        $lineNo, 0, Error::SEVERITY_ERROR,
-                        sprintf('Line must end with "%s"', $eolName),
-                        $this
-                    ));
-                }
+            if ($line['ending'] !== '' && $line['ending'] !== $eolChar) {
+                $ending = str_replace(array("\r", "\n"), array('\r', '\n'), $line['ending']);
+
+                $file->addError(new Error(
+                    $lineNo, 0, Error::SEVERITY_ERROR,
+                    sprintf('Line must end with "%s", found "%s"', $eolName, $ending),
+                    $this
+                ));
             }
         }
     }

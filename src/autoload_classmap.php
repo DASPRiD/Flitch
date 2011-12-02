@@ -28,6 +28,7 @@ return array(
     'Flitch\Rule\Manager'                            => __DIR__ . '//Flitch/Rule/Manager.php',
     'Flitch\Rule\Loader'                             => __DIR__ . '//Flitch/Rule/Loader.php',
     'Flitch\Rule\Whitespace\NoWhitespaceAtEndOfLine' => __DIR__ . '//Flitch/Rule/Whitespace/NoWhitespaceAtEndOfLine.php',
+    'Flitch\Test\RuleTestCase'                       => __DIR__ . '//Flitch/Test/RuleTestCase.php',
     'Flitch\File\File'                               => __DIR__ . '//Flitch/File/File.php',
     'Flitch\File\Error'                              => __DIR__ . '//Flitch/File/Error.php',
     'Flitch\File\Tokenizer'                          => __DIR__ . '//Flitch/File/Tokenizer.php',

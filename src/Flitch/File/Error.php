@@ -18,6 +18,8 @@
 
 namespace Flitch\File;
 
+use Flitch\Rule\Rule;
+
 /**
  * Error representation.
  * 
@@ -86,8 +88,8 @@ class Error
     {
         $source = get_class($source);
         
-        if (strpos($ruleName, 'Flitch\\Rule\\') === 0) {
-            $source = 'Flitch\\' . substr($ruleName, strlen('Flitch\\Rule\\'));
+        if (strpos($source, 'Flitch\\Rule\\') === 0) {
+            $source = 'Flitch\\' . substr($source, strlen('Flitch\\Rule\\'));
         }
         
         $this->line     = (int) $line;

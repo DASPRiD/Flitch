@@ -49,7 +49,7 @@ class File implements ArrayAccess
      * 
      * @var array
      */
-    protected $lines;
+    protected $lines = array();
     
     /**
      * Tokens.
@@ -77,11 +77,15 @@ class File implements ArrayAccess
         $this->filename = $filename;
         $this->source   = $source;
         
-        $this->lines = preg_split('(\r?\n|\r)', $source);
+        // Split source into line arrays, containing both content and ending.
+        preg_match_all('((?<content>.*?)(?<ending>\n|\r\n?|$))', $source, $matches, PREG_SET_ORDER);
         
-        // Change the lines array to start counting at 1
-        array_unshift($this->lines, '');
-        unset($this->lines[0]);
+        foreach ($matches as $index => $line) {
+            $this->lines[$index + 1] = array(
+                'content' => $line['content'],
+                'ending'  => $line['ending']
+            );
+        }
     }
 
     /**
