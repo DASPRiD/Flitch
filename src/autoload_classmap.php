@@ -25,6 +25,7 @@ return array(
     'Flitch\Rule\Php\NoShortOpenTags'                => __DIR__ . '//Flitch/Rule/Php/NoShortOpenTags.php',
     'Flitch\Rule\Rule'                               => __DIR__ . '//Flitch/Rule/Rule.php',
     'Flitch\Rule\Line\Separator'                     => __DIR__ . '//Flitch/Rule/Line/Separator.php',
+    'Flitch\Rule\Line\DisallowWhitespaceAtEnd'       => __DIR__ . '//Flitch/Rule/Line/DisallowWhitespaceAtEnd.php',
     'Flitch\Rule\Line\MaxLength'                     => __DIR__ . '//Flitch/Rule/Line/MaxLength.php',
     'Flitch\Rule\AbstractRule'                       => __DIR__ . '//Flitch/Rule/AbstractRule.php',
     'Flitch\Rule\Manager'                            => __DIR__ . '//Flitch/Rule/Manager.php',
