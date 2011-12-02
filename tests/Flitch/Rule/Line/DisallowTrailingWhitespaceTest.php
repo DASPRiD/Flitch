@@ -21,7 +21,7 @@ namespace FlitchTest\Rule\Line;
 
 use Flitch\Test\RuleTestCase,
     Flitch\File\File,
-    Flitch\Rule\Line\DisallowWhitespaceAtEnd;
+    Flitch\Rule\Line\DisallowTrailingWhitespace;
 
 /**
  * @category   Flitch
@@ -30,30 +30,30 @@ use Flitch\Test\RuleTestCase,
  * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
  * @license    New BSD License
  */
-class DisallowWhitespaceAtEndTest extends RuleTestCase
+class DisallowTrailingWhitespaceTest extends RuleTestCase
 {  
-    public function testDefaultLimits()
+    public function testTrailingWhitespace()
     {
         $this->file = new File(
             'foo.php',
             "<?php \n\t\n// foo"
         );
         
-        $rule = new DisallowWhitespaceAtEnd();
+        $rule = new DisallowTrailingWhitespace();
         $rule->check($this->file);
         
         $this->assertRuleViolations($this->file, array(
             array(
                 'line'     => 1,
                 'column'   => 0,
-                'message'  => 'Line may not contain whitespace at end of line',
-                'source'   => 'Flitch\Line\DisallowWhitespaceAtEnd'
+                'message'  => 'Line may not contain trailing whitespace',
+                'source'   => 'Flitch\Line\DisallowTrailingWhitespace'
             ),
             array(
                 'line'     => 2,
                 'column'   => 0,
-                'message'  => 'Line may not contain whitespace at end of line',
-                'source'   => 'Flitch\Line\DisallowWhitespaceAtEnd'
+                'message'  => 'Line may not contain trailing whitespace',
+                'source'   => 'Flitch\Line\DisallowTrailingWhitespace'
             ),
         ));
     }

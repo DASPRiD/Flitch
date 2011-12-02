@@ -23,7 +23,7 @@ use Flitch\Rule\AbstractRule,
     Flitch\File\File;
 
 /**
- * Disallow whitespace at end of line rule.
+ * Disallow trailing whitespace rule.
  * 
  * @category   Flitch
  * @package    Flitch_Rule
@@ -31,7 +31,7 @@ use Flitch\Rule\AbstractRule,
  * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
  * @license    New BSD License
  */
-class DisallowWhitespaceAtEnd extends AbstractRule
+class DisallowTrailingWhitespace extends AbstractRule
 {
     /**
      * check(): defined by Rule interface.
@@ -46,7 +46,7 @@ class DisallowWhitespaceAtEnd extends AbstractRule
             if (preg_match('(\s+$)', $data['content'])) {
                 $this->addViolation(
                     $file, $line, 0,
-                    'Line may not contain whitespace at end of line'
+                    'Line may not contain trailing whitespace'
                 );
             }
         }
