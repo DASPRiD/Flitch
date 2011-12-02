@@ -25,7 +25,7 @@ use Flitch\File\File
  * Checkstyle report.
  * 
  * @category   Flitch
- * @package    Flitch_Checkstyle
+ * @package    Flitch_Report
  * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
  * @license    New BSD License
  */
@@ -68,18 +68,18 @@ class Checkstyle implements Report
         $this->writer->startElement('file');
         $this->writer->writeAttribute('name', $file->getFilename());
         
-        foreach ($file->getErrors() as $error) {
+        foreach ($file->getViolations() as $violation) {
             $this->writer->startElement('error');
         
-            $this->writer->writeAttribute('line', $error->getLine());
+            $this->writer->writeAttribute('line', $violation->getLine());
                         
             if ($error->getColumn() > 0) {
-                $this->writer->writeAttribute('column', $error->getColumn());
+                $this->writer->writeAttribute('column', $violation->getColumn());
             }
             
-            $this->writer->writeAttribute('severity', $error->getSeverity());
-            $this->writer->writeAttribute('message', $error->getMessage());
-            $this->writer->writeAttribute('source', $error->getSource());
+            $this->writer->writeAttribute('severity', $violation->getSeverity());
+            $this->writer->writeAttribute('message', $violation->getMessage());
+            $this->writer->writeAttribute('source', $violation->getSource());
             
             $this->writer->endElement();
         }

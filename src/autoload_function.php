@@ -25,6 +25,6 @@ return function ($class) {
     if (!isset($map[$class])) {
         return false;
     }
-    
+    // just some                                                                                very long                                comment…
     return include $map[$class];
 };

@@ -18,6 +18,7 @@
 return array(
     'Flitch\Report\Report'                           => __DIR__ . '//Flitch/Report/Report.php',
     'Flitch\Report\Checkstyle'                       => __DIR__ . '//Flitch/Report/Checkstyle.php',
+    'Flitch\Report\Cli'                              => __DIR__ . '//Flitch/Report/Cli.php',
     'Flitch\Exception\RuntimeException'              => __DIR__ . '//Flitch/Exception/RuntimeException.php',
     'Flitch\Version'                                 => __DIR__ . '//Flitch/Version.php',
     'Flitch\Rule\Php\MustStartWithOpenTag'           => __DIR__ . '//Flitch/Rule/Php/MustStartWithOpenTag.php',

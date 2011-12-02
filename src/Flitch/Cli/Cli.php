@@ -21,6 +21,7 @@ namespace Flitch\Cli;
 use Flitch\Version,
     Flitch\File\Tokenizer,
     Flitch\Rule\Manager,
+    Flitch\Report\Cli as CliReport,
     RegexIterator,
     RecursiveDirectoryIterator,
     RecursiveIteratorIterator;
@@ -146,7 +147,7 @@ class Cli
             if (is_dir($path)) {
                 $paths[] = new RegexIterator(
                     new RecursiveIteratorIterator(
-                        new RecursiveDirectoryIterator($this->path)
+                        new RecursiveDirectoryIterator($path)
                     ),
                     '(\.php$)i'
                 );
@@ -157,17 +158,20 @@ class Cli
 
         $manager   = new Manager(__DIR__ . '/../../../standards', '~/.flitch/standards', $this->standard);
         $tokenizer = new Tokenizer();
+        $report    = new CliReport();
 
         foreach ($paths as $path) {
             if (is_string($path)) {
                 $file = $tokenizer->tokenize($path, file_get_contents($path));
                 
                 $manager->check($file);
+                $report->addFile($file);
             } else {
-                foreach ($iterator as $fileInfo) {
+                foreach ($path as $fileInfo) {
                     $file = $tokenizer->tokenize($fileInfo->getPathname(), file_get_contents($fileInfo->getPathname()));
 
                     $manager->check($file);
+                    $report->addFile($file);
                 }
             }
         }

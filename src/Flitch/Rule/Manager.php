@@ -92,7 +92,7 @@ class Manager
     public function check(File $file)
     {
         foreach ($this->rules as $rule) {
-            $rule['rule']->check($file, $rule['options']);
+            $rule->check($file);
         }
     }
     
@@ -130,10 +130,15 @@ class Manager
                 throw new Exception\RuntimeException(sprintf('Could not load rule "%s"', $ruleName));
             }
             
-            $this->rules[$ruleName] = array(
-                'rule'    => $rule,
-                'options' => $options
-            );
+            foreach ($options as $key => $value) {
+                $setter = 'set' . ucfirst(preg_replace('(_([a-z]))e', 'strtoupper("\1")', strtolower($key)));
+                
+                if (method_exists($rule, $setter)) {
+                    $rule->{$setter}($value);
+                }
+            }
+            
+            $this->rules[] = $rule;
         }
         
         return true;
