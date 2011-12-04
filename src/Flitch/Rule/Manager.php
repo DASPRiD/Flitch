@@ -23,7 +23,7 @@ use Flitch\File\File,
 
 /**
  * Rule manager.
- * 
+ *
  * @category   Flitch
  * @package    Flitch_Rule
  * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
@@ -33,44 +33,44 @@ class Manager
 {
     /**
      * Rule loader.
-     * 
+     *
      * @var Loader
      */
     protected $loader;
-    
+
     /**
      * Global standards path.
-     * 
+     *
      * @var string
      */
     protected $globalPath;
-    
+
     /**
      * Local standards path.
-     * 
+     *
      * @var string
      */
     protected $localPath;
-    
+
     /**
      * Name of the current standard.
-     * 
+     *
      * @var string
      */
     protected $standard;
-    
+
     /**
      * Rules in current standard.
-     * 
+     *
      * @var string
      */
     protected $rules = array();
-    
+
     /**
      * Create a new rule manager.
-     * 
+     *
      * @param  string $globalPath
-     * @param  string $localPath 
+     * @param  string $localPath
      * @return void
      */
     public function __construct($globalPath, $localPath, $standard)
@@ -79,13 +79,13 @@ class Manager
         $this->globalPath = rtrim($globalPath, '/\\');
         $this->localPath  = rtrim($localPath, '/\\');
         $this->standard   = $standard;
-        
+
         $this->loadStandard();
     }
-    
+
     /**
      * Check a given file for all rules.
-     * 
+     *
      * @param  File $file
      * @return void
      */
@@ -95,52 +95,52 @@ class Manager
             $rule->check($file);
         }
     }
-    
+
     /**
      * Load a coding standard.
-     * 
+     *
      * @return void
      */
     protected function loadStandard()
     {
         $filename = $this->localPath . '/' . $this->standard . '/standard.ini';
-        
+
         if (!file_exists($filename)) {
             $filename = $this->globalPath . '/' . $this->standard . '/standard.ini';
-            
+
             if (!file_exists($filename)) {
                 throw new Exception\RuntimeException(sprintf('Could not find standard "%s"', $this->standard));
             }
         }
-        
+
         if (!is_readable($filename)) {
             throw new Exception\RuntimeException(sprintf('Standard "%s" is not readable', $this->standard));
         }
-        
+
         $standard = @parse_ini_file($filename, true);
-        
+
         if ($standard === false) {
             throw new Exception\RuntimeException(sprintf('Could not load standard "%s"', $this->standard));
         }
-        
+
         foreach ($standard as $ruleName => $options) {
             $rule = $this->loader->load($ruleName);
-            
+
             if ($rule === null) {
                 throw new Exception\RuntimeException(sprintf('Could not load rule "%s"', $ruleName));
             }
-            
+
             foreach ($options as $key => $value) {
                 $setter = 'set' . ucfirst(preg_replace('(_([a-z]))e', 'strtoupper("\1")', strtolower($key)));
-                
+
                 if (method_exists($rule, $setter)) {
                     $rule->{$setter}($value);
                 }
             }
-            
+
             $this->rules[] = $rule;
         }
-        
+
         return true;
     }
 }

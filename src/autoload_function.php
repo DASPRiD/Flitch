@@ -17,7 +17,7 @@
 
 return function ($class) {
     static $map;
-    
+
     if (!$map) {
         $map = include __DIR__ . '/autoload_classmap.php';
     }
@@ -25,6 +25,6 @@ return function ($class) {
     if (!isset($map[$class])) {
         return false;
     }
-    // just some                                                                                very long                                comment…
+
     return include $map[$class];
 };

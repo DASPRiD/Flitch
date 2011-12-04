@@ -12,26 +12,26 @@
  *
  * @category   Flitch
  * @package    Flitch_Rule
- * @subpackage Php
+ * @subpackage Whitespace
  * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
  * @license    New BSD License
  */
 
-namespace Flitch\Rule\Php;
+namespace Flitch\Rule\Whitespace;
 
 use Flitch\Rule\AbstractRule,
     Flitch\File\File;
 
 /**
- * Must start with open tag rule.
+ * Disallow tabulators rule.
  *
  * @category   Flitch
  * @package    Flitch_Rule
- * @subpackage Php
+ * @subpackage Whitespace
  * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
  * @license    New BSD License
  */
-class MustStartWithOpenTag extends AbstractRule
+class DisallowTabulators extends AbstractRule
 {
     /**
      * check(): defined by Rule interface.
@@ -42,11 +42,19 @@ class MustStartWithOpenTag extends AbstractRule
      */
     public function check(File $file)
     {
-        if ($file->bottom()->getType() !== T_OPEN_TAG) {
-            $this->addViolation(
-                $file, 1, 1,
-                'File must start with an open tag'
-            );
+        $file->rewind();
+
+        while ($file->seekTokenType(T_WHITESPACE)) {
+            $token = $file->current();
+
+            if (false !== strpos($token->getLexeme(), "\t")) {
+                $this->addViolation(
+                    $file, $token->getLine(), $token->getColumn(),
+                    'Tabulators are not allowed'
+                );
+            }
+
+            $file->next();
         }
     }
 }
