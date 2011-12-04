@@ -19,38 +19,42 @@
 
 namespace Flitch\Rule\Php;
 
-use Flitch\Rule\Rule,
+use Flitch\Rule\AbstractRule,
     Flitch\File\File;
 
 /**
  * No short open tags rule.
- * 
+ *
  * @category   Flitch
  * @package    Flitch_Rule
  * @subpackage Php
  * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
  * @license    New BSD License
  */
-class NoShortOpenTags implements Rule
+class DisallowShortOpenTags extends AbstractRule
 {
     /**
      * check(): defined by Rule interface.
-     * 
+     *
      * @see    Rule::check()
      * @param  File  $file
-     * @param  array $options
      * @return void
      */
-    public function check(File $file, array $options = array())
+    public function check(File $file)
     {
-        foreach ($file->find(T_OPEN_TAG) as $token) {
-            if ($token->getLexeme() !== '<' . '?php') {
-                $file->addError(new Error(
-                    $token->getLine(), $token->getColumn(), Error::SEVERITY_ERROR,
-                    'Short open tags are not allowed',
-                    $this
-                ));
-            }    
+        $file->rewind();
+
+        while ($file->seekTokenType(T_OPEN_TAG)) {
+            $token = $file->current();
+
+            if (strpos($token->getLexeme(), '<' . '?php') !== 0) {
+                $this->addViolation(
+                    $file, $token->getLine(), $token->getColumn(),
+                    'Short open tags are not allowed'
+                );
+            }
+
+            $file->next();
         }
     }
 }

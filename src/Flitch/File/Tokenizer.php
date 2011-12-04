@@ -20,7 +20,7 @@ namespace Flitch\File;
 
 /**
  * File tokenizer.
- * 
+ *
  * @category   Flitch
  * @package    Flitch_File
  * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
@@ -30,17 +30,17 @@ class Tokenizer
 {
     /**
      * Tokenize source code.
-     * 
+     *
      * @param  string $filename
      * @param  string $source
      * @return File
      */
     public function tokenize($filename, $source)
     {
-        $file   = new File($filename, $source);       
+        $file   = new File($filename, $source);
         $line   = 1;
         $column = 1;
-        
+
         foreach (token_get_all($source) as $token) {
             if (is_array($token)) {
                 $type   = $token[0];
@@ -51,17 +51,17 @@ class Tokenizer
             }
 
             $token = new Token($type, $lexeme, $line, $column);
-            
+
             if ($token->hasNewline()) {
                 $line   += $token->getNewLineCount();
                 $column  = 1 + $token->getTrailingLineLength();
             } else {
                 $column += $token->getLength();
             }
-            
+
             $file[] = $token;
         }
-        
+
         return $file;
     }
 }

@@ -28,7 +28,7 @@ use Flitch\Version,
 
 /**
  * CLI handler.
- * 
+ *
  * @category   Flitch
  * @package    Flitch_Cli
  * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
@@ -38,28 +38,28 @@ class Cli
 {
     /**
      * Working directory.
-     * 
+     *
      * @var string
      */
     protected $workingDirectory;
-    
+
     /**
      * Standard to use.
-     * 
+     *
      * @var string
      */
     protected $standard = 'ZF2';
-    
+
     /**
      * Paths to scan.
-     * 
+     *
      * @var array
      */
     protected $paths = array();
-    
+
     /**
      * Create a new CLI object.
-     * 
+     *
      * @param  string $workingDirectory
      * @return void
      */
@@ -67,17 +67,17 @@ class Cli
     {
         $this->workingDirectory = rtrim($workingDirectory, '/\\');
     }
-    
+
     /**
      * Run Flitch.
-     * 
+     *
      * @param  array $arguments
      * @return void
      */
     public function run(array $arguments)
     {
         echo "Flitch " . Version::getVersion() . " by Ben Scholzen.\n\n";
-        
+
         $parser = new ArgumentParser($arguments, array(
             array(
                 'code'    => 's',
@@ -95,39 +95,39 @@ class Cli
                 'has_arg' => false
             ),
         ));
-        
+
         if ($parser->getError() !== null) {
             echo $parser->getError() . "\n";
             return;
         }
-        
+
         $method  = 'analyzeFiles';
-        
+
         foreach ($parser->getOptions() as $option) {
             switch ($option['code']) {
                 case 's':
                     $this->standard = $option['argument'];
                     break;
-                
+
                 case 'h':
                     $method = 'printHelp';
                     break;
-                
+
                 case 'v':
                     return;
             }
         }
-        
+
         foreach ($parser->getNonOptions() as $nonOption) {
             $this->paths[] = $nonOption;
         }
-        
+
         $this->{$method}();
     }
-    
+
     /**
      * Analyze files for coding standard violations.
-     * 
+     *
      * @return void
      */
     protected function analyzeFiles()
@@ -138,12 +138,12 @@ class Cli
         }
 
         $paths = array();
-        
+
         foreach ($this->paths as $path) {
             if (!file_exists($path) || !is_readable($path)) {
                 echo "Cannot open " . $path . "\n";
             }
-            
+
             if (is_dir($path)) {
                 $paths[] = new RegexIterator(
                     new RecursiveIteratorIterator(
@@ -163,7 +163,7 @@ class Cli
         foreach ($paths as $path) {
             if (is_string($path)) {
                 $file = $tokenizer->tokenize($path, file_get_contents($path));
-                
+
                 $manager->check($file);
                 $report->addFile($file);
             } else {
@@ -176,10 +176,10 @@ class Cli
             }
         }
     }
-    
+
     /**
      * Print help.
-     * 
+     *
      * @return void
      */
     protected function printHelp()
