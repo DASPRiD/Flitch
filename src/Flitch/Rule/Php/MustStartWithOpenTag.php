@@ -42,7 +42,7 @@ class MustStartWithOpenTag extends AbstractRule
      */
     public function check(File $file)
     {
-        if ($file->bottom()->getType() !== T_OPEN_TAG) {
+        if (count($file) > 0 && $file->bottom()->getType() !== T_OPEN_TAG) {
             $this->addViolation(
                 $file, 1, 1,
                 'File must start with an open tag'
