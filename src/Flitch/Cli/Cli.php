@@ -58,6 +58,20 @@ class Cli
     protected $paths = array();
 
     /**
+     * Run silently w/o any console output
+     *
+     * @var bool
+     */
+    public $quiet = false;
+
+    /**
+     * Reports
+     *
+     * @var array
+     */
+    public $reports = array();
+
+    /**
      * Create a new CLI object.
      *
      * @param  string $workingDirectory
@@ -85,6 +99,11 @@ class Cli
                 'has_arg' => true
             ),
             array(
+                'code'    => 'q',
+                'name'    => 'quiet',
+                'has_arg' => false
+            ),
+            array(
                 'code'    => 'h',
                 'name'    => 'help',
                 'has_arg' => false
@@ -107,6 +126,10 @@ class Cli
             switch ($option['code']) {
                 case 's':
                     $this->standard = $option['argument'];
+                    break;
+
+                case 'q':
+                    $this->quiet = true;
                     break;
 
                 case 'h':
@@ -158,25 +181,31 @@ class Cli
 
         $manager   = new Manager(__DIR__ . '/../../../standards', '~/.flitch/standards', $this->standard);
         $tokenizer = new Tokenizer();
-        $report    = new CliReport();
+
+        if (false === $this->quiet) {
+            $this->reports['cli'] = new CliReport();
+        }
 
         foreach ($paths as $path) {
             if (is_string($path)) {
-                $file = $this->processFile($path, $tokenizer, $manager, $report);
+                $file = $this->processFile($path, $tokenizer, $manager);
             } else {
                 foreach ($path as $fileInfo) {
-                    $this->processFile($fileInfo->getPathname(), $tokenizer, $manager, $report);
+                    $this->processFile($fileInfo->getPathname(), $tokenizer, $manager);
                 }
             }
         }
     }
 
-    private function processFile($path, $tokenizer, $manager, $report)
+    private function processFile($path, $tokenizer, $manager)
     {
         $file = $tokenizer->tokenize($path, file_get_contents($path));
 
         $manager->check($file);
-        $report->addFile($file);
+
+        foreach ($this->reports as $report) {
+            $report->addFile($file);
+        }
 
         return $file;
     }
@@ -190,8 +219,9 @@ class Cli
     {
         echo "Usage: flitch [switches] <directory>\n"
            . "       flitch [switches] <file>\n\n"
-           . "  -s, --standard=STANDARD Use specified coding standard\n"
-           . "  -h, --help              Prints this usage information\n"
-           . "  -v, --version           Print version information\n";
+           . "  -s, --standard=STANDARD   Use specified coding standard\n"
+           . "  -q, --quiet               Run silently\n"
+           . "  -h, --help                Prints this usage information\n"
+           . "  -v, --version             Print version information\n";
     }
 }
