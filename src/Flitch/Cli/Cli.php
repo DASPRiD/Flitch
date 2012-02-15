@@ -162,19 +162,23 @@ class Cli
 
         foreach ($paths as $path) {
             if (is_string($path)) {
-                $file = $tokenizer->tokenize($path, file_get_contents($path));
-
-                $manager->check($file);
-                $report->addFile($file);
+                $file = $this->processFile($path, $tokenizer, $manager, $report);
             } else {
                 foreach ($path as $fileInfo) {
-                    $file = $tokenizer->tokenize($fileInfo->getPathname(), file_get_contents($fileInfo->getPathname()));
-
-                    $manager->check($file);
-                    $report->addFile($file);
+                    $this->processFile($fileInfo->getPathname(), $tokenizer, $manager, $report);
                 }
             }
         }
+    }
+
+    private function processFile($path, $tokenizer, $manager, $report)
+    {
+        $file = $tokenizer->tokenize($path, file_get_contents($path));
+
+        $manager->check($file);
+        $report->addFile($file);
+
+        return $file;
     }
 
     /**
