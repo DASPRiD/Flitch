@@ -221,7 +221,7 @@ class ArgumentParser
             if ($char !== null) {
                 foreach ($options as $i => $optionData) {
                     if ($char === $optionData['code']) {
-                        $index = i;
+                        $index = $i;
                         break;
                     }
                 }
