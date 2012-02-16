@@ -135,7 +135,7 @@ class File extends SplDoublyLinkedList implements SeekableIterator
     /**
      * Add a violation to the file.
      *
-     * @param  Error $violation
+     * @param Violation $violation
      * @return void
      */
     public function addViolation(Violation $violation)
