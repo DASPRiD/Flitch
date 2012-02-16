@@ -225,7 +225,7 @@ class Cli
      * @param  Manager $manager
      * @return File
      */
-    private function analyzeFile($path, Tokenizer $tokenizer, Manager $manager)
+    protected function analyzeFile($path, Tokenizer $tokenizer, Manager $manager)
     {
         $file = $tokenizer->tokenize($path, file_get_contents($path));
 
