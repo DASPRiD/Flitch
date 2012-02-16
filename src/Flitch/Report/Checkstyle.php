@@ -37,10 +37,10 @@ class Checkstyle implements Report
      * @var XMLWriter
      */
     protected $writer;
-    
+
     /**
      * Create a new checkstyle report.
-     * 
+     *
      * @param  string $filename
      * @return void
      */
@@ -55,10 +55,10 @@ class Checkstyle implements Report
         $this->writer->startElement('checkstyle');
         $this->writer->writeAttribute('version', '5.5');
     }
-    
+
     /**
      * addFile(): defined by Report interface.
-     * 
+     *
      * @see    Report::addFile()
      * @param  File $file
      * @return void
