@@ -21,8 +21,7 @@ namespace Flitch\Cli;
 use Flitch\Version,
     Flitch\File\Tokenizer,
     Flitch\Rule\Manager,
-    Flitch\Report\Cli as CliReport,
-    Flitch\Report\Checkstyle as CheckstyleReport,
+    Flitch\Report,
     RegexIterator,
     RecursiveDirectoryIterator,
     RecursiveIteratorIterator;
@@ -63,21 +62,21 @@ class Cli
      *
      * @var string
      */
-    public $checkstyle = false;
+    protected $checkstyleReportFilename = null;
 
     /**
      * Run silently w/o any console output
      *
      * @var bool
      */
-    public $quiet = false;
+    protected $quiet = false;
 
     /**
      * Reports
      *
      * @var array
      */
-    public $reports = array();
+    protected $reports = array();
 
     /**
      * Create a new CLI object.
@@ -142,7 +141,7 @@ class Cli
                     break;
 
                 case 'c':
-                    $this->checkstyle = $option['argument'];
+                    $this->checkstyleReportFilename = $option['argument'];
                     break;
 
                 case 'q':
@@ -200,16 +199,16 @@ class Cli
         $tokenizer = new Tokenizer();
 
         if (false === $this->quiet) {
-            $this->reports['cli'] = new CliReport();
+            $this->reports['cli'] = new Report\Cli();
         }
 
-        if (false !== $this->checkstyle) {
-            $this->reports['checkstyle'] = new CheckstyleReport($this->checkstyle);
+        if (!empty($this->checkstyleReportFilename)) {
+            $this->reports['checkstyle'] = new Report\Checkstyle($this->checkstyleReportFilename);
         }
 
         foreach ($paths as $path) {
             if (is_string($path)) {
-                $file = $this->analyzeFile($path, $tokenizer, $manager);
+                $this->analyzeFile($path, $tokenizer, $manager);
             } else {
                 foreach ($path as $fileInfo) {
                     $this->analyzeFile($fileInfo->getPathname(), $tokenizer, $manager);
@@ -218,7 +217,15 @@ class Cli
         }
     }
 
-    private function analyzeFile($path, $tokenizer, $manager)
+    /**
+     * Analyze single file for coding standard violations.
+     *
+     * @param  string $path
+     * @param  Tokenizer $tokenizer
+     * @param  Manager $manager
+     * @return File
+     */
+    private function analyzeFile($path, Tokenizer $tokenizer, Manager $manager)
     {
         $file = $tokenizer->tokenize($path, file_get_contents($path));
 
