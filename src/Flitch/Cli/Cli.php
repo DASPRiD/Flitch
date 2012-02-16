@@ -22,6 +22,7 @@ use Flitch\Version,
     Flitch\File\Tokenizer,
     Flitch\Rule\Manager,
     Flitch\Report\Cli as CliReport,
+    Flitch\Report\Checkstyle as CheckstyleReport,
     RegexIterator,
     RecursiveDirectoryIterator,
     RecursiveIteratorIterator;
@@ -56,6 +57,13 @@ class Cli
      * @var array
      */
     protected $paths = array();
+
+    /**
+     * Path to checkstyle report output file
+     *
+     * @var string
+     */
+    public $checkstyle = false;
 
     /**
      * Run silently w/o any console output
@@ -99,6 +107,11 @@ class Cli
                 'has_arg' => true
             ),
             array(
+                'code'    => 'c',
+                'name'    => 'checkstyle',
+                'has_arg' => true
+            ),
+            array(
                 'code'    => 'q',
                 'name'    => 'quiet',
                 'has_arg' => false
@@ -126,6 +139,10 @@ class Cli
             switch ($option['code']) {
                 case 's':
                     $this->standard = $option['argument'];
+                    break;
+
+                case 'c':
+                    $this->checkstyle = $option['argument'];
                     break;
 
                 case 'q':
@@ -186,18 +203,22 @@ class Cli
             $this->reports['cli'] = new CliReport();
         }
 
+        if (false !== $this->checkstyle) {
+            $this->reports['checkstyle'] = new CheckstyleReport($this->checkstyle);
+        }
+
         foreach ($paths as $path) {
             if (is_string($path)) {
-                $file = $this->processFile($path, $tokenizer, $manager);
+                $file = $this->analyzeFile($path, $tokenizer, $manager);
             } else {
                 foreach ($path as $fileInfo) {
-                    $this->processFile($fileInfo->getPathname(), $tokenizer, $manager);
+                    $this->analyzeFile($fileInfo->getPathname(), $tokenizer, $manager);
                 }
             }
         }
     }
 
-    private function processFile($path, $tokenizer, $manager)
+    private function analyzeFile($path, $tokenizer, $manager)
     {
         $file = $tokenizer->tokenize($path, file_get_contents($path));
 
@@ -220,6 +241,7 @@ class Cli
         echo "Usage: flitch [switches] <directory>\n"
            . "       flitch [switches] <file>\n\n"
            . "  -s, --standard=STANDARD   Use specified coding standard\n"
+           . "  -c, --checkstyle=FILENAME Generate CheckStyle report\n"
            . "  -q, --quiet               Run silently\n"
            . "  -h, --help                Prints this usage information\n"
            . "  -v, --version             Print version information\n";
