@@ -62,7 +62,7 @@ class Cli
      *
      * @var string
      */
-    protected $checkstyleReportFilename = null;
+    protected $checkstyleReportFilename;
 
     /**
      * Run silently w/o any console output
@@ -208,10 +208,10 @@ class Cli
 
         foreach ($paths as $path) {
             if (is_string($path)) {
-                $this->analyzeFile($path, $tokenizer, $manager);
+                $file = $this->analyzeFile($path, $tokenizer, $manager);
             } else {
                 foreach ($path as $fileInfo) {
-                    $this->analyzeFile($fileInfo->getPathname(), $tokenizer, $manager);
+                    $file = $this->analyzeFile($fileInfo->getPathname(), $tokenizer, $manager);
                 }
             }
         }
@@ -220,9 +220,9 @@ class Cli
     /**
      * Analyze single file for coding standard violations.
      *
-     * @param  string $path
-     * @param  Tokenizer $tokenizer
-     * @param  Manager $manager
+     * @param  string       $path
+     * @param  Tokenizer    $tokenizer
+     * @param  Manager      $manager
      * @return File
      */
     protected function analyzeFile($path, Tokenizer $tokenizer, Manager $manager)
