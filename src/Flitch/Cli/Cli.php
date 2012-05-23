@@ -48,7 +48,7 @@ class Cli
      *
      * @var string
      */
-    protected $standard = 'ZF2';
+    protected $standard = 'PSR2';
 
     /**
      * Paths to scan.

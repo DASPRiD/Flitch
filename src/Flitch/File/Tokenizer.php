@@ -40,6 +40,7 @@ class Tokenizer
         $file   = new File($filename, $source);
         $line   = 1;
         $column = 1;
+        $level  = 0;
 
         foreach (token_get_all($source) as $token) {
             if (is_array($token)) {
@@ -58,6 +59,15 @@ class Tokenizer
             } else {
                 $column += $token->getLength();
             }
+
+            // Block level increment.
+            if (in_array($type, array('(', '{', T_CURLY_OPEN, T_DOLLAR_OPEN_CURLY_BRACES))) {
+                $level++;
+            } elseif (in_array($type, array(')', '}'))) {
+                $level--;
+            }
+
+            $token->setLevel($level);
 
             $file[] = $token;
         }

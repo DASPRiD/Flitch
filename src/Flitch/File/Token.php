@@ -57,6 +57,13 @@ class Token
     protected $column;
 
     /**
+     * Code block level.
+     *
+     * @var integer
+     */
+    protected $level;
+
+    /**
      * Create a new token.
      *
      * @param  mixed   $type
@@ -111,6 +118,28 @@ class Token
     public function getColumn()
     {
         return $this->column;
+    }
+
+    /**
+     * Set block level.
+     *
+     * @param  integer $level
+     * @return Token
+     */
+    public function setLevel($level)
+    {
+        $this->level = $level;
+        return $this;
+    }
+
+    /**
+     * Get block level.
+     *
+     * @return integer
+     */
+    public function getLevel()
+    {
+        return $this->level;
     }
 
     /**

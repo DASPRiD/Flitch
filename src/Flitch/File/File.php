@@ -200,6 +200,26 @@ class File extends SplDoublyLinkedList implements SeekableIterator
     }
 
     /**
+     * Seek to the next line.
+     *
+     * @return boolean
+     */
+    public function seekNextLine()
+    {
+        $line = $this->current()->getLine();
+
+        while ($true) {
+            $this->next();
+
+            if (!$this->valid()) {
+                return false;
+            } elseif ($this->current()->getLine() > $line) {
+                return true;
+            }
+        }
+    }
+
+    /**
      * seek(): defined by SeekableIterator interface.
      *
      * @see    SeekableIterator::seek()
