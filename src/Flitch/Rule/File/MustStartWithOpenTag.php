@@ -12,12 +12,12 @@
  *
  * @category   Flitch
  * @package    Flitch_Rule
- * @subpackage Php
+ * @subpackage File
  * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
  * @license    New BSD License
  */
 
-namespace Flitch\Rule\Php;
+namespace Flitch\Rule\File;
 
 use Flitch\Rule\AbstractRule,
     Flitch\File\File;
@@ -27,7 +27,7 @@ use Flitch\Rule\AbstractRule,
  *
  * @category   Flitch
  * @package    Flitch_Rule
- * @subpackage Php
+ * @subpackage File
  * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
  * @license    New BSD License
  */

@@ -17,11 +17,11 @@
  * @license    New BSD License
  */
 
-namespace FlitchTest\Rule\Php;
+namespace FlitchTest\Rule\File;
 
 use Flitch\Test\RuleTestCase,
     Flitch\File\Tokenizer,
-    Flitch\Rule\Php\MustStartWithOpenTag;
+    Flitch\Rule\File\MustStartWithOpenTag;
 
 /**
  * @category   Flitch
@@ -48,7 +48,7 @@ class MustStartWithOpenTagTest extends RuleTestCase
                 'line'     => 1,
                 'column'   => 1,
                 'message'  => 'File must start with an open tag',
-                'source'   => 'Flitch\Php\MustStartWithOpenTag'
+                'source'   => 'Flitch\File\MustStartWithOpenTag'
             ),
         ));
     }

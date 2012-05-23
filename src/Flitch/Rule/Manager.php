@@ -103,25 +103,7 @@ class Manager
      */
     protected function loadStandard()
     {
-        $filename = $this->localPath . '/' . $this->standard . '/standard.ini';
-
-        if (!file_exists($filename)) {
-            $filename = $this->globalPath . '/' . $this->standard . '/standard.ini';
-
-            if (!file_exists($filename)) {
-                throw new Exception\RuntimeException(sprintf('Could not find standard "%s"', $this->standard));
-            }
-        }
-
-        if (!is_readable($filename)) {
-            throw new Exception\RuntimeException(sprintf('Standard "%s" is not readable', $this->standard));
-        }
-
-        $standard = @parse_ini_file($filename, true);
-
-        if ($standard === false) {
-            throw new Exception\RuntimeException(sprintf('Could not load standard "%s"', $this->standard));
-        }
+        $standard = $this->loadStandardFile($this->standard);
 
         foreach ($standard as $ruleName => $options) {
             $rule = $this->loader->load($ruleName);
@@ -140,7 +122,46 @@ class Manager
 
             $this->rules[] = $rule;
         }
+    }
 
-        return true;
+    /**
+     * Load a coding standard.
+     *
+     * @param  string $name
+     * @return array
+     */
+    protected function loadStandardFile($name)
+    {
+        $filename = $this->localPath . '/' . $name . '/standard.ini';
+
+        if (!file_exists($filename)) {
+            $filename = $this->globalPath . '/' . $name . '/standard.ini';
+
+            if (!file_exists($filename)) {
+                throw new Exception\RuntimeException(sprintf('Could not find standard "%s"', $name));
+            }
+        }
+
+        if (!is_readable($filename)) {
+            throw new Exception\RuntimeException(sprintf('Standard "%s" is not readable', $name));
+        }
+
+        $standard = @parse_ini_file($filename, true);
+
+        if ($standard === false) {
+            throw new Exception\RuntimeException(sprintf('Could not load standard "%s"', $name));
+        }
+
+        if (isset($standard['extends'])) {
+            $extends = array_map('trim', explode(',', $standard['extends']));
+
+            foreach ($extends as $extend) {
+                $standard = array_replace_recursive($standard, $this->loadStandard($extend));
+            }
+
+            unset($standard['extends']);
+        }
+
+        return $standard;
     }
 }

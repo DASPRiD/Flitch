@@ -17,11 +17,11 @@
  * @license    New BSD License
  */
 
-namespace FlitchTest\Rule\Php;
+namespace FlitchTest\Rule\File;
 
 use Flitch\Test\RuleTestCase,
     Flitch\File\Tokenizer,
-    Flitch\Rule\Php\DisallowShortOpenTags;
+    Flitch\Rule\File\DisallowShortOpenTags;
 
 /**
  * @category   Flitch
@@ -48,7 +48,7 @@ class DisallowShortOpenTagsTest extends RuleTestCase
                 'line'     => 1,
                 'column'   => 1,
                 'message'  => 'Short open tags are not allowed',
-                'source'   => 'Flitch\Php\DisallowShortOpenTags'
+                'source'   => 'Flitch\File\DisallowShortOpenTags'
             ),
         ));
     }
