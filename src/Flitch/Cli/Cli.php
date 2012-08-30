@@ -21,7 +21,7 @@ namespace Flitch\Cli;
 use Flitch\Version,
     Flitch\File\Tokenizer,
     Flitch\Rule\Manager,
-    Flitch\Report\Cli as CliReport,
+    Flitch\Report,
     RegexIterator,
     RecursiveDirectoryIterator,
     RecursiveIteratorIterator;
@@ -58,6 +58,27 @@ class Cli
     protected $paths = array();
 
     /**
+     * Path to checkstyle report output file
+     *
+     * @var string
+     */
+    protected $checkstyleReportFilename;
+
+    /**
+     * Run silently w/o any console output
+     *
+     * @var bool
+     */
+    protected $quiet = false;
+
+    /**
+     * Reports
+     *
+     * @var array
+     */
+    protected $reports = array();
+
+    /**
      * Create a new CLI object.
      *
      * @param  string $workingDirectory
@@ -85,6 +106,16 @@ class Cli
                 'has_arg' => true
             ),
             array(
+                'code'    => 'c',
+                'name'    => 'checkstyle',
+                'has_arg' => true
+            ),
+            array(
+                'code'    => 'q',
+                'name'    => 'quiet',
+                'has_arg' => false
+            ),
+            array(
                 'code'    => 'h',
                 'name'    => 'help',
                 'has_arg' => false
@@ -107,6 +138,14 @@ class Cli
             switch ($option['code']) {
                 case 's':
                     $this->standard = $option['argument'];
+                    break;
+
+                case 'c':
+                    $this->checkstyleReportFilename = $option['argument'];
+                    break;
+
+                case 'q':
+                    $this->quiet = true;
                     break;
 
                 case 'h':
@@ -158,23 +197,45 @@ class Cli
 
         $manager   = new Manager(__DIR__ . '/../../../standards', '~/.flitch/standards', $this->standard);
         $tokenizer = new Tokenizer();
-        $report    = new CliReport();
+
+        if (false === $this->quiet) {
+            $this->reports['cli'] = new Report\Cli();
+        }
+
+        if (!empty($this->checkstyleReportFilename)) {
+            $this->reports['checkstyle'] = new Report\Checkstyle($this->checkstyleReportFilename);
+        }
 
         foreach ($paths as $path) {
             if (is_string($path)) {
-                $file = $tokenizer->tokenize($path, file_get_contents($path));
-
-                $manager->check($file);
-                $report->addFile($file);
+                $file = $this->analyzeFile($path, $tokenizer, $manager);
             } else {
                 foreach ($path as $fileInfo) {
-                    $file = $tokenizer->tokenize($fileInfo->getPathname(), file_get_contents($fileInfo->getPathname()));
-
-                    $manager->check($file);
-                    $report->addFile($file);
+                    $file = $this->analyzeFile($fileInfo->getPathname(), $tokenizer, $manager);
                 }
             }
         }
+    }
+
+    /**
+     * Analyze single file for coding standard violations.
+     *
+     * @param  string       $path
+     * @param  Tokenizer    $tokenizer
+     * @param  Manager      $manager
+     * @return File
+     */
+    protected function analyzeFile($path, Tokenizer $tokenizer, Manager $manager)
+    {
+        $file = $tokenizer->tokenize($path, file_get_contents($path));
+
+        $manager->check($file);
+
+        foreach ($this->reports as $report) {
+            $report->addFile($file);
+        }
+
+        return $file;
     }
 
     /**
@@ -186,8 +247,10 @@ class Cli
     {
         echo "Usage: flitch [switches] <directory>\n"
            . "       flitch [switches] <file>\n\n"
-           . "  -s, --standard=STANDARD Use specified coding standard\n"
-           . "  -h, --help              Prints this usage information\n"
-           . "  -v, --version           Print version information\n";
+           . "  -s, --standard=STANDARD   Use specified coding standard\n"
+           . "  -c, --checkstyle=FILENAME Generate CheckStyle report\n"
+           . "  -q, --quiet               Run silently\n"
+           . "  -h, --help                Prints this usage information\n"
+           . "  -v, --version             Print version information\n";
     }
 }

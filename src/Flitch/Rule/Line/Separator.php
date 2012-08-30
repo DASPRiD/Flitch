@@ -88,7 +88,7 @@ class Separator extends AbstractRule
      */
     public function check(File $file)
     {
-        foreach ($file->getLines() as $line => $data) {           
+        foreach ($file->getLines() as $line => $data) {
             if ($data['ending'] !== '' && $data['ending'] !== $this->eolChar) {
                 $ending = str_replace(array("\r", "\n"), array('\r', '\n'), $data['ending']);
 

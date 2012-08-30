@@ -18,7 +18,8 @@
 
 namespace Flitch\Report;
 
-use Flitch\File\File
+use Flitch\File\File,
+    Flitch\File\Violation,
     \XMLWriter;
 
 /**
@@ -37,10 +38,10 @@ class Checkstyle implements Report
      * @var XMLWriter
      */
     protected $writer;
-    
+
     /**
      * Create a new checkstyle report.
-     * 
+     *
      * @param  string $filename
      * @return void
      */
@@ -55,10 +56,10 @@ class Checkstyle implements Report
         $this->writer->startElement('checkstyle');
         $this->writer->writeAttribute('version', '5.5');
     }
-    
+
     /**
      * addFile(): defined by Report interface.
-     * 
+     *
      * @see    Report::addFile()
      * @param  File $file
      * @return void
@@ -67,13 +68,14 @@ class Checkstyle implements Report
     {
         $this->writer->startElement('file');
         $this->writer->writeAttribute('name', $file->getFilename());
-        
+
+        /** @var $violation Violation */
         foreach ($file->getViolations() as $violation) {
             $this->writer->startElement('error');
         
             $this->writer->writeAttribute('line', $violation->getLine());
                         
-            if ($error->getColumn() > 0) {
+            if ($violation->getColumn() > 0) {
                 $this->writer->writeAttribute('column', $violation->getColumn());
             }
             

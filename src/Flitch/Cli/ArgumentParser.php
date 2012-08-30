@@ -51,7 +51,7 @@ class ArgumentParser
 
     /**
      * Parse command line arguments.
-     * 
+     *
      * @param  array $arguments
      * @param  array $options
      * @return void
