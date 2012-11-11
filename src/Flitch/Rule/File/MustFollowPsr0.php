@@ -43,15 +43,20 @@ class MustFollowPsr0 extends AbstractRule
             }
 
             $psr0Compliant     = true;
-            $expectedPathParts = explode('/', str_replace(array('\\', '_'), '/', $fqcn));
+            $expectedPathParts = array_diff(explode('/', str_replace(array('\\', '_'), '/', $fqcn)), array(''));
             $expectedFilename  = array_pop($expectedPathParts) . '.php';
 
             $pathParts = explode('/', str_replace('\\', '/', realpath($file->getFilename())));
             $filename  = array_pop($pathParts);
 
             if ($filename !== $expectedFilename) {
+                // Class name should match filename.
+                $psr0Compliant = false;
+            } elseif (count($expectedPathParts) === 0) {
+                // Vendor level namespace required.
                 $psr0Compliant = false;
             } else {
+                // Path should match namespace structure.
                 $pathParts = array_slice($pathParts, -count($expectedPathParts));
 
                 if ($pathParts !== $expectedPathParts) {
