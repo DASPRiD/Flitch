@@ -58,7 +58,7 @@ class Token
      * @param  integer $column
      * @return void
      */
-    public function __construct($type, $lexeme = null, $line, $column)
+    public function __construct($type, $lexeme, $line, $column)
     {
         $this->type   = $type;
         $this->lexeme = $lexeme;
