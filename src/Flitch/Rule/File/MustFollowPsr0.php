@@ -18,6 +18,27 @@ use Flitch\Rule\AbstractRule;
 class MustFollowPsr0 extends AbstractRule
 {
     /**
+     * Whether to require a vendor namespace.
+     *
+     * @var boolean
+     */
+    protected $requireVendorNamespace = true;
+
+    /**
+     * Set whether to require a vendor namespace.
+     *
+     * PSR-0 itself requires a vendor namespace. Since this is not possible in
+     * legacy PHP 5.2 code, this option exists as fallback.
+     *
+     * @param  boolean $flag
+     * @return MustFollowPsr0
+     */
+    public function requireVendorNamespace($requireVendorNamespace)
+    {
+        $this->requireVendorNamespace = (bool) $requireVendorNamespace;
+    }
+
+    /**
      * check(): defined by Rule interface.
      *
      * @see    Rule::check()
@@ -34,33 +55,42 @@ class MustFollowPsr0 extends AbstractRule
                 continue;
             }
 
-            $token = $file->current();
+            $token         = $file->current();
+            $psr0Compliant = true;
 
             if ($token->getNamespace() !== null) {
                 $fqcn = $token->getNamespace() . '\\' . $token->getLexeme();
+                $path = str_replace('\\', '/', $token->getNamespace())
+                      . '/' . str_replace('_', '/', $token->getLexeme());
             } else {
                 $fqcn = $token->getLexeme();
+                $path = str_replace('_', '/', $token->getLexeme());
+
+                if ($this->requireVendorNamespace) {
+                    $psr0Compliant = false;
+                }
             }
 
-            $psr0Compliant     = true;
-            $expectedPathParts = array_diff(explode('/', str_replace(array('\\', '_'), '/', $fqcn)), array(''));
-            $expectedFilename  = array_pop($expectedPathParts) . '.php';
+            if ($psr0Compliant) {
+                $expectedPathParts = array_diff(explode('/', $path), array(''));
+                $expectedFilename  = array_pop($expectedPathParts) . '.php';
 
-            $pathParts = explode('/', str_replace('\\', '/', realpath($file->getFilename())));
-            $filename  = array_pop($pathParts);
+                $pathParts = explode('/', str_replace('\\', '/', realpath($file->getFilename())));
+                $filename  = array_pop($pathParts);
 
-            if ($filename !== $expectedFilename) {
-                // Class name should match filename.
-                $psr0Compliant = false;
-            } elseif (count($expectedPathParts) === 0) {
-                // Vendor level namespace required.
-                $psr0Compliant = false;
-            } else {
-                // Path should match namespace structure.
-                $pathParts = array_slice($pathParts, -count($expectedPathParts));
-
-                if ($pathParts !== $expectedPathParts) {
+                if ($filename !== $expectedFilename) {
+                    // Class name should match filename.
                     $psr0Compliant = false;
+                } elseif (count($expectedPathParts) === 0) {
+                    // Vendor level namespace required.
+                    $psr0Compliant = false;
+                } else {
+                    // Path should match namespace structure.
+                    $pathParts = array_slice($pathParts, -count($expectedPathParts));
+
+                    if ($pathParts !== $expectedPathParts) {
+                        $psr0Compliant = false;
+                    }
                 }
             }
 
