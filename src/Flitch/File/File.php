@@ -11,7 +11,7 @@ namespace Flitch\File;
 
 use SplDoublyLinkedList,
     SeekableIterator,
-    Flitch\Exception;
+    Flitch\ExceptionInterface;
 
 /**
  * File representation.

@@ -9,11 +9,9 @@
 
 namespace Flitch\Exception;
 
-use Flitch\Exception;
-
 /**
  * Out of bounds exception.
  */
-class OutOfBoundsException extends \OutOfBoundsException implements Exception
+class OutOfBoundsException extends \OutOfBoundsException implements ExceptionInterface
 {
 }

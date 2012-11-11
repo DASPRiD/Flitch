@@ -9,16 +9,9 @@
 
 namespace Flitch\Exception;
 
-use Flitch\Exception;
-
 /**
  * Runtime exception.
- *
- * @category   Flitch
- * @package    Flitch\Exception
- * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
- * @license    New BSD License
  */
-class RuntimeException extends \RuntimeException implements Exception
+class RuntimeException extends \RuntimeException implements ExceptionInterface
 {
 }

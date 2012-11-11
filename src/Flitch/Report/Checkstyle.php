@@ -16,7 +16,7 @@ use Flitch\File\File,
 /**
  * Checkstyle report.
  */
-class Checkstyle implements Report
+class Checkstyle implements ReportInterface
 {
     /**
      * XML writer.

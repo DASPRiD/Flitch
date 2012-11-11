@@ -14,7 +14,7 @@ use Flitch\File\File;
 /**
  * CLI report.
  */
-class Cli implements Report
+class Cli implements ReportInterface
 {
     /**
      * Whether the first line was already processed.

@@ -7,20 +7,11 @@
  * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
-namespace Flitch\Report;
-
-use Flitch\File\File;
+namespace Flitch\Exception;
 
 /**
- * Report interface.
+ * Exception marker interface.
  */
-interface Report
+interface ExceptionInterface
 {
-    /**
-     * Add a file to the report.
-     *
-     * @param  File $file
-     * @return void
-     */
-    public function addFile(File $file);
 }

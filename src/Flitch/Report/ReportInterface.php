@@ -7,20 +7,20 @@
  * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
-namespace Flitch\Rule;
+namespace Flitch\Report;
 
 use Flitch\File\File;
 
 /**
- * Rule interface.
+ * Report interface.
  */
-interface Rule
+interface ReportInterface
 {
     /**
-     * Check a given file for rule violations.
+     * Add a file to the report.
      *
-     * @param  File  $file
+     * @param  File $file
      * @return void
      */
-    public function check(File $file);
+    public function addFile(File $file);
 }

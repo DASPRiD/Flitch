@@ -15,7 +15,7 @@ use Flitch\File\File,
 /**
  * Abstract rule.
  */
-abstract class AbstractRule implements Rule
+abstract class AbstractRule implements RuleInterface
 {
     /**
      * Severity to use for errors.

@@ -45,7 +45,7 @@ class Loader
      * Load a rule.
      *
      * @param  string $ruleName
-     * @return Rule
+     * @return RuleInterface
      */
     public function load($ruleName)
     {
@@ -77,7 +77,7 @@ class Loader
 
         $rule = new $classname();
 
-        if (!$rule instanceof Rule) {
+        if (!$rule instanceof RuleInterface) {
             return null;
         }
 

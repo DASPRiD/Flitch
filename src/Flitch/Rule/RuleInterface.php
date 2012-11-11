@@ -7,11 +7,20 @@
  * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
-namespace Flitch;
+namespace Flitch\Rule;
+
+use Flitch\File\File;
 
 /**
- * Exception marker interface.
+ * Rule interface.
  */
-interface Exception
+interface RuleInterface
 {
+    /**
+     * Check a given file for rule violations.
+     *
+     * @param  File  $file
+     * @return void
+     */
+    public function check(File $file);
 }
