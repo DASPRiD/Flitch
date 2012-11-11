@@ -30,7 +30,7 @@ class MustStartWithOpenTagTest extends RuleTestCase
             array(
                 'line'     => 1,
                 'column'   => 1,
-                'message'  => 'File must start with an open tag',
+                'message'  => 'File does not start with PHP open tag',
                 'source'   => 'Flitch\File\MustStartWithOpenTag'
             ),
         ));

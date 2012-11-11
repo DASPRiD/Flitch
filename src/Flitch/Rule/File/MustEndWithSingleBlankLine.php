@@ -13,23 +13,29 @@ use Flitch\File\File;
 use Flitch\Rule\AbstractRule;
 
 /**
- * Must start with open tag rule.
+ * Must end with single blank line rule.
  */
-class MustStartWithOpenTag extends AbstractRule
+class MustEndWithSingleBlankLine extends AbstractRule
 {
     /**
      * check(): defined by Rule interface.
      *
      * @see    Rule::check()
-     * @param  File  $file
+     * @param  File $file
      * @return void
      */
     public function check(File $file)
     {
-        if (count($file) > 0 && $file->bottom()->getType() !== T_OPEN_TAG) {
+        $lastToken = $file->top();
+
+        if (
+            $lastToken->getType() !== T_WHITESPACE
+            || $lastToken->getNewlineCount() !== 1
+            || $lastToken->getTrailingLineLength() !== 0
+        ) {
             $this->addViolation(
-                $file, 1, 1,
-                'File does not start with PHP open tag'
+                $file, $lastToken->getLine(), $lastToken->getColumn(),
+                'File does not end with a single blank line'
             );
         }
     }
