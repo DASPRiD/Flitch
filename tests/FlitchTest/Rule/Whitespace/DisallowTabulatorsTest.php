@@ -7,7 +7,7 @@
  * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
-namespace FlitchTest\Rule\Php;
+namespace FlitchTest\Rule\Whitespace;
 
 use Flitch\File\Tokenizer;
 use Flitch\Rule\Whitespace\DisallowTabulators;
