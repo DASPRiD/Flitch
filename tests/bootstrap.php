@@ -23,7 +23,7 @@ define('BASE_PATH',  dirname(__DIR__));
 define('TESTS_PATH', __DIR__);
 
 // Define filters for clover report
-$filter = PHP_CodeCoverage_Filter::getInstance();
+$filter = new PHP_CodeCoverage_Filter();
 $filter->addDirectoryToBlacklist(TESTS_PATH);
 $filter->addDirectoryToBlacklist(BASE_PATH . '/bin');
 $filter->addFilesToBlacklist(array(
@@ -32,6 +32,7 @@ $filter->addFilesToBlacklist(array(
     BASE_PATH . '/src/autoload_register.php',
 ));
 $filter->addDirectoryToWhitelist(BASE_PATH . '/src', '.php');
+unset($filter);
 
 // Load autoloader
 require_once BASE_PATH . '/src/autoload_register.php';

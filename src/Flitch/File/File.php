@@ -183,7 +183,10 @@ class File extends SplDoublyLinkedList implements SeekableIterator
         $currentPosition = $this->key();
 
         while ($this->valid()) {
-            if ($this->current()->getType() === $type) {
+            if (
+                (is_array($type) && in_array($this->current()->getType(), $type))
+                || $this->current()->getType() === $type
+            ) {
                 return true;
             }
 
@@ -208,7 +211,7 @@ class File extends SplDoublyLinkedList implements SeekableIterator
     {
         $line = $this->current()->getLine();
 
-        while ($true) {
+        while (true) {
             $this->next();
 
             if (!$this->valid()) {
