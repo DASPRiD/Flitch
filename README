@@ -8,8 +8,8 @@ PHPCS. It is partly based on PHPca <https://github.com/spriebsch/phpca> by
 Stefan Priebsch, but should not be confused with a fork of it.
 
 Flitch will scan through your source files and detect coding standard
-violations. Currently it ships with ZF2 as core standard, but can be extended
-by custom standards.
+violations. Currently it ships with PSR-1 and PSR-2 as core standards, but can
+be extended by custom standards.
 
 Why replace PHPCS?
 ------------------
@@ -18,9 +18,9 @@ Since this question came up a few times already, here is a list of reasons:
 - PHPCS is known to be a memory hog.
 - It is not trivial to write complex rules for PHPCS.
 - It is complicated to write unit tests for rules.
-- There are bug reports open since 2008.
 - Flitch is written completly modular, so it can be reused in other
   applications.
+- Last but not least, competition is a good thing.
 
 Adding custom standards
 -----------------------

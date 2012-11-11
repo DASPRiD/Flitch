@@ -2,19 +2,9 @@
 /**
  * Flitch
  *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to mail@dasprids.de so I can send you a copy immediately.
- *
- * @category   Flitch
- * @package    Flitch_Rule
- * @subpackage Whitespace
- * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
- * @license    New BSD License
+ * @link      http://github.com/DASPRiD/Flitch For the canonical source repository
+ * @copyright 2011-2012 Ben 'DASPRiD' Scholzen
+ * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
 namespace Flitch\Rule\Whitespace;
@@ -24,12 +14,6 @@ use Flitch\Rule\AbstractRule,
 
 /**
  * Disallow tabulators rule.
- *
- * @category   Flitch
- * @package    Flitch_Rule
- * @subpackage Whitespace
- * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
- * @license    New BSD License
  */
 class DisallowTabulators extends AbstractRule
 {

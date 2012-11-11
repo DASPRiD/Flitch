@@ -2,18 +2,9 @@
 /**
  * Flitch
  *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to mail@dasprids.de so I can send you a copy immediately.
- *
- * @category   Flitch
- * @package    Flitch_Test
- * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
- * @license    New BSD License
+ * @link      http://github.com/DASPRiD/Flitch For the canonical source repository
+ * @copyright 2011-2012 Ben 'DASPRiD' Scholzen
+ * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
 namespace Flitch\Test;
@@ -23,18 +14,12 @@ use PHPUnit_Framework_TestCase as TestCase,
 
 /**
  * Test case class for testing rules.
- * 
- * @category   Flitch
- * @package    Flitch_Test
- * @subpackage UnitTests
- * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
- * @license    New BSD License
  */
 class RuleTestCase extends TestCase
 {
     /**
      * Assert a specific set of violations.
-     * 
+     *
      * @param  File  $file
      * @param  array $expectedViolations
      * @return void
@@ -43,7 +28,7 @@ class RuleTestCase extends TestCase
     {
         // Get all violations and convert them to an array for comparision.
         $violations = array();
-        
+
         foreach ($file->getViolations() as $error) {
             $violations[] = array(
                 'line'     => $error->getLine(),
@@ -52,7 +37,7 @@ class RuleTestCase extends TestCase
                 'source'   => $error->getSource()
             );
         }
-        
+
         $this->assertEquals($expectedViolations, $violations);
     }
 }

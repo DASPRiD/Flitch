@@ -2,49 +2,35 @@
 /**
  * Flitch
  *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to mail@dasprids.de so I can send you a copy immediately.
- *
- * @category   Flitch
- * @package    Flitch_Cli
- * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
- * @license    New BSD License
+ * @link      http://github.com/DASPRiD/Flitch For the canonical source repository
+ * @copyright 2011-2012 Ben 'DASPRiD' Scholzen
+ * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
 namespace Flitch\Cli;
 
 /**
  * Argument parser.
- *
- * @category   Flitch
- * @package    Flitch_Cli
- * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
- * @license    New BSD License
  */
 class ArgumentParser
 {
     /**
      * Parsed options.
-     * 
+     *
      * @var array
      */
     protected $options = array();
-    
+
     /**
      * Parsed non-options.
-     * 
+     *
      * @var array
      */
     protected $nonOptions = array();
-    
+
     /**
      * Error during argument parsing.
-     * 
+     *
      * @var string
      */
     protected $error;
@@ -88,30 +74,30 @@ class ArgumentParser
             }
         }
     }
-    
+
     /**
      * Get all parsed options.
-     * 
+     *
      * @return array
      */
     public function getOptions()
     {
         return $this->options;
     }
-    
+
     /**
      * Get all parsed non-options.
-     * 
+     *
      * @return array
      */
     public function getNonOptions()
     {
         return $this->nonOptions;
     }
-    
+
     /**
      * Get parser error.
-     * 
+     *
      * @return string
      */
     public function getError()
@@ -121,12 +107,12 @@ class ArgumentParser
 
     /**
      * Parse a long option.
-     * 
+     *
      * @param  string  $option
      * @param  string  $argument
      * @param  array   $options
      * @param  integer $argumentIndex
-     * @return boolean 
+     * @return boolean
      */
     protected function parseLongOption($option, $argument, array $options, &$argumentIndex)
     {
@@ -138,7 +124,7 @@ class ArgumentParser
         for ($length = 0; isset($option[$length + 2]) && $option[$length + 2] !== '='; $length++);
 
         foreach ($options as $i => $optionData) {
-            if (!strncmp($optionData['name'], $optionName, $length)) {               
+            if (!strncmp($optionData['name'], $optionName, $length)) {
                 if (strlen($optionName) === strlen($optionData['name'])) {
                     $index = $i;
                     $exact = true;
@@ -174,50 +160,50 @@ class ArgumentParser
                 'code'     => $options[$index]['code'],
                 'argument' => substr($option, $length + 3)
             );
-            
+
             return true;
         }
-        
+
         if ($options[$index]['has_arg'] === true) {
             if (!$argument || !isset($argument[0])) {
                 $this->error = sprintf('Option "%s" requires an argument', $option);
                 return false;
             }
-            
+
             $argumentIndex++;
             $this->options[] = array(
                 'code'     => $options[$index]['code'],
                 'argument' => $argument
             );
-            
+
             return true;
         }
-        
+
         $this->options[] = array(
             'code'     => $options[$index]['code'],
             'argument' => null
         );
-        
+
         return true;
     }
-    
+
     /**
      * Parse a short option.
-     * 
+     *
      * @param  string  $option
      * @param  string  $argument
      * @param  array   $options
      * @param  integer $argumentIndex
-     * @return boolean 
+     * @return boolean
      */
     protected function parseShortOption($option, $argument, array $options, &$argumentIndex)
     {
         $charIndex = 1;
-        
+
         while ($charIndex !== null) {
             $index = null;
             $char  = (isset($option[$charIndex]) ? $option[$charIndex] : null);
-            
+
             if ($char !== null) {
                 foreach ($options as $i => $optionData) {
                     if ($char === $optionData['code']) {
@@ -226,39 +212,39 @@ class ArgumentParser
                     }
                 }
             }
-            
+
             if ($index === null) {
                 $this->errors[] = sprintf('Invalid option -- %s', $char);
                 return false;
             }
-            
+
             if (!isset($option[++$charIndex])) {
                 $argumentIndex++;
                 $charIndex = null;
             }
-            
+
             if ($options[$index]['has_arg'] !== false && $charIndex > 0 && isset($option[$charIndex])) {
                 $this->options[] = array(
                     'code'     => $char,
                     'argument' => substr($option, $charIndex)
                 );
-                
+
                 $charIndex = null;
             } elseif ($options[$index]['has_arg'] === true) {
                 if (!$argument || !isset($argument[0])) {
                     $this->error = sprintf('Option "%s" requires an argument', $char);
                     return false;
                 }
-                
+
                 $this->options[] = array(
                     'code'     => $char,
                     'argument' => $argument
                 );
-                
+
                 $charIndex = null;
             }
         }
-        
+
         return true;
     }
 }

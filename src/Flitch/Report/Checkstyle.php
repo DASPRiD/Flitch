@@ -2,18 +2,9 @@
 /**
  * Flitch
  *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to mail@dasprids.de so I can send you a copy immediately.
- *
- * @category   Flitch
- * @package    Flitch_Report
- * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
- * @license    New BSD License
+ * @link      http://github.com/DASPRiD/Flitch For the canonical source repository
+ * @copyright 2011-2012 Ben 'DASPRiD' Scholzen
+ * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
 namespace Flitch\Report;
@@ -24,17 +15,12 @@ use Flitch\File\File,
 
 /**
  * Checkstyle report.
- * 
- * @category   Flitch
- * @package    Flitch_Report
- * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
- * @license    New BSD License
  */
 class Checkstyle implements Report
 {
     /**
      * XML writer.
-     * 
+     *
      * @var XMLWriter
      */
     protected $writer;
@@ -51,7 +37,7 @@ class Checkstyle implements Report
         $this->writer->openUri($filename);
         $this->writer->setIndent(true);
         $this->writer->setIndentString('    ');
-        
+
         $this->writer->startDocument('1.0', 'UTF-8');
         $this->writer->startElement('checkstyle');
         $this->writer->writeAttribute('version', '5.5');
@@ -69,29 +55,28 @@ class Checkstyle implements Report
         $this->writer->startElement('file');
         $this->writer->writeAttribute('name', $file->getFilename());
 
-        /** @var $violation Violation */
         foreach ($file->getViolations() as $violation) {
             $this->writer->startElement('error');
-        
+
             $this->writer->writeAttribute('line', $violation->getLine());
-                        
+
             if ($violation->getColumn() > 0) {
                 $this->writer->writeAttribute('column', $violation->getColumn());
             }
-            
+
             $this->writer->writeAttribute('severity', $violation->getSeverity());
             $this->writer->writeAttribute('message', $violation->getMessage());
             $this->writer->writeAttribute('source', $violation->getSource());
-            
+
             $this->writer->endElement();
         }
-        
+
         $this->writer->endElement();
     }
-    
+
     /**
      * Close the file handle on destruct.
-     * 
+     *
      * @return void
      */
     public function __destruct()

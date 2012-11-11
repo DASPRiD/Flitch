@@ -2,19 +2,9 @@
 /**
  * Flitch
  *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to mail@dasprids.de so I can send you a copy immediately.
- *
- * @category   Flitch
- * @package    Flitch_Rule
- * @subpackage Line
- * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
- * @license    New BSD License
+ * @link      http://github.com/DASPRiD/Flitch For the canonical source repository
+ * @copyright 2011-2012 Ben 'DASPRiD' Scholzen
+ * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
 namespace Flitch\Rule\Line;
@@ -24,32 +14,26 @@ use Flitch\Rule\AbstractRule,
 
 /**
  * Max line length rule.
- * 
- * @category   Flitch
- * @package    Flitch_Rule
- * @subpackage Line
- * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
- * @license    New BSD License
  */
 class MaxLength extends AbstractRule
 {
     /**
      * Max line length limit.
-     * 
+     *
      * @var integer
      */
     protected $limit = 80;
-    
+
     /**
      * Defines how many spaces a tab takes up.
-     * 
+     *
      * @var integer
      */
     protected $tabExpand = 4;
-    
+
     /**
      * Set max line length limit.
-     * 
+     *
      * @param  integer $length
      * @return MaxLength
      */
@@ -58,10 +42,10 @@ class MaxLength extends AbstractRule
         $this->limit = (int) $length;
         return $this;
     }
-    
+
     /**
      * Set how many spaces a tab takes up.
-     * 
+     *
      * @param  integer $size
      * @return MaxLength
      */
@@ -70,10 +54,10 @@ class MaxLength extends AbstractRule
         $this->tabExpand = (int) $size;
         return $this;
     }
-    
+
     /**
      * check(): defined by Rule interface.
-     * 
+     *
      * @see    Rule::check()
      * @param  File  $file
      * @return void
@@ -86,7 +70,7 @@ class MaxLength extends AbstractRule
                 $data['content']),
                 $file->getEncoding()
             );
-            
+
             if ($lineLength > $this->limit) {
                 $this->addViolation(
                     $file, $line, 0,
