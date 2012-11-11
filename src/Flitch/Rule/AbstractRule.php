@@ -42,6 +42,10 @@ abstract class AbstractRule implements RuleInterface
     /**
      * Add a violation to the current file.
      *
+     * @param  File    $file
+     * @param  integer $line
+     * @param  integer $column
+     * @param  string  $message
      * @return void
      */
     protected function addViolation(File $file, $line, $column, $message)
