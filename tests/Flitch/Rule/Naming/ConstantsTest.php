@@ -9,9 +9,9 @@
 
 namespace FlitchTest\Rule\Naming;
 
-use Flitch\Test\RuleTestCase,
-    Flitch\File\Tokenizer,
-    Flitch\Rule\Naming\Constants;
+use Flitch\File\Tokenizer;
+use Flitch\Rule\Naming\Constants;
+use Flitch\Test\RuleTestCase;
 
 class ConstantsTest extends RuleTestCase
 {

@@ -9,9 +9,9 @@
 
 namespace FlitchTest\Rule\File;
 
-use Flitch\Test\RuleTestCase,
-    Flitch\File\Tokenizer,
-    Flitch\Rule\File\DisallowShortOpenTags;
+use Flitch\File\Tokenizer;
+use Flitch\Rule\File\DisallowShortOpenTags;
+use Flitch\Test\RuleTestCase;
 
 class DisallowShortOpenTagsTest extends RuleTestCase
 {

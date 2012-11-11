@@ -11,11 +11,6 @@ namespace Flitch\File;
 
 /**
  * File tokenizer.
- *
- * @category   Flitch
- * @package    Flitch_File
- * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
- * @license    New BSD License
  */
 class Tokenizer
 {

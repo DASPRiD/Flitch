@@ -9,9 +9,9 @@
 
 namespace FlitchTest\Rule\Line;
 
-use Flitch\Test\RuleTestCase,
-    Flitch\File\File,
-    Flitch\Rule\Line\DisallowTrailingWhitespace;
+use Flitch\File\File;
+use Flitch\Rule\Line\DisallowTrailingWhitespace;
+use Flitch\Test\RuleTestCase;
 
 class DisallowTrailingWhitespaceTest extends RuleTestCase
 {

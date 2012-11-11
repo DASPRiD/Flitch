@@ -9,9 +9,9 @@
 
 namespace FlitchTest\Rule\Line;
 
-use Flitch\Test\RuleTestCase,
-    Flitch\File\File,
-    Flitch\Rule\Line\Separator;
+use Flitch\File\File;
+use Flitch\Rule\Line\Separator;
+use Flitch\Test\RuleTestCase;
 
 class SeparatorTest extends RuleTestCase
 {

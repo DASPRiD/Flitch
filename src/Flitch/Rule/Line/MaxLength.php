@@ -9,8 +9,8 @@
 
 namespace Flitch\Rule\Line;
 
-use Flitch\Rule\AbstractRule,
-    Flitch\File\File;
+use Flitch\File\File;
+use Flitch\Rule\AbstractRule;
 
 /**
  * Max line length rule.

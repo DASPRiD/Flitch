@@ -9,8 +9,8 @@
 
 namespace Flitch\Rule;
 
-use Flitch\File\File,
-    Flitch\File\Violation;
+use Flitch\File\File;
+use Flitch\File\Violation;
 
 /**
  * Abstract rule.

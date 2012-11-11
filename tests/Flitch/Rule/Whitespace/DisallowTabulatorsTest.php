@@ -9,9 +9,9 @@
 
 namespace FlitchTest\Rule\Php;
 
-use Flitch\Test\RuleTestCase,
-    Flitch\File\Tokenizer,
-    Flitch\Rule\Whitespace\DisallowTabulators;
+use Flitch\File\Tokenizer;
+use Flitch\Rule\Whitespace\DisallowTabulators;
+use Flitch\Test\RuleTestCase;
 
 class DisallowTabulatorsTest extends RuleTestCase
 {

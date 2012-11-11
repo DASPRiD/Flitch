@@ -9,13 +9,13 @@
 
 namespace Flitch\Cli;
 
-use Flitch\Version,
-    Flitch\File\Tokenizer,
-    Flitch\Rule\Manager,
-    Flitch\Report,
-    RegexIterator,
-    RecursiveDirectoryIterator,
-    RecursiveIteratorIterator;
+use Flitch\File\Tokenizer;
+use Flitch\Report\Report;
+use Flitch\Rule\Manager;
+use Flitch\Version;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use RegexIterator;
 
 /**
  * CLI handler.

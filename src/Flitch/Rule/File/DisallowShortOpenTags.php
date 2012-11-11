@@ -9,8 +9,8 @@
 
 namespace Flitch\Rule\File;
 
-use Flitch\Rule\AbstractRule,
-    Flitch\File\File;
+use Flitch\File\File;
+use Flitch\Rule\AbstractRule;
 
 /**
  * No short open tags rule.

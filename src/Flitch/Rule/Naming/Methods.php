@@ -9,8 +9,8 @@
 
 namespace Flitch\Rule\Naming;
 
-use Flitch\Rule\AbstractRule,
-    Flitch\File\File;
+use Flitch\File\File;
+use Flitch\Rule\AbstractRule;
 
 /**
  * Method name rule.

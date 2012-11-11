@@ -9,9 +9,9 @@
 
 namespace FlitchTest\Rule\File;
 
-use Flitch\Test\RuleTestCase,
-    Flitch\File\Tokenizer,
-    Flitch\Rule\File\MustStartWithOpenTag;
+use Flitch\File\Tokenizer;
+use Flitch\Rule\File\MustStartWithOpenTag;
+use Flitch\Test\RuleTestCase;
 
 class MustStartWithOpenTagTest extends RuleTestCase
 {

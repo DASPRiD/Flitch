@@ -9,9 +9,9 @@
 
 namespace FlitchTest\Rule\Naming;
 
-use Flitch\Test\RuleTestCase,
-    Flitch\File\Tokenizer,
-    Flitch\Rule\Naming\Methods;
+use Flitch\File\Tokenizer;
+use Flitch\Rule\Naming\Methods;
+use Flitch\Test\RuleTestCase;
 
 class MethodsTest extends RuleTestCase
 {

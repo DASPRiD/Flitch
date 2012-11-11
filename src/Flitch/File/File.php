@@ -9,17 +9,12 @@
 
 namespace Flitch\File;
 
-use SplDoublyLinkedList,
-    SeekableIterator,
-    Flitch\ExceptionInterface;
+use Flitch\Exception;
+use SeekableIterator;
+use SplDoublyLinkedList;
 
 /**
  * File representation.
- *
- * @category   Flitch
- * @package    Flitch_File
- * @copyright  Copyright (c) 2011 Ben Scholzen <mail@dasprids.de>
- * @license    New BSD License
  */
 class File extends SplDoublyLinkedList implements SeekableIterator
 {

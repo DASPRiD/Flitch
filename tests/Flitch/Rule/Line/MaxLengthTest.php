@@ -9,9 +9,9 @@
 
 namespace FlitchTest\Rule\Line;
 
-use Flitch\Test\RuleTestCase,
-    Flitch\File\File,
-    Flitch\Rule\Line\MaxLength;
+use Flitch\File\File;
+use Flitch\Rule\Line\MaxLength;
+use Flitch\Test\RuleTestCase;
 
 class MaxLengthTest extends RuleTestCase
 {

@@ -9,8 +9,8 @@
 
 namespace Flitch\Rule;
 
-use Flitch\File\File,
-    Flitch\Exception;
+use Flitch\Exception;
+use Flitch\File\File;
 
 /**
  * Rule manager.

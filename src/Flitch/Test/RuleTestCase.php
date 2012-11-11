@@ -9,8 +9,8 @@
 
 namespace Flitch\Test;
 
-use PHPUnit_Framework_TestCase as TestCase,
-    Flitch\File\File;
+use Flitch\File\File;
+use PHPUnit_Framework_TestCase as TestCase;
 
 /**
  * Test case class for testing rules.

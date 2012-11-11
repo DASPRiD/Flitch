@@ -9,9 +9,8 @@
 
 namespace Flitch\Report;
 
-use Flitch\File\File,
-    Flitch\File\Violation,
-    \XMLWriter;
+use Flitch\File\File;
+use XMLWriter;
 
 /**
  * Checkstyle report.
