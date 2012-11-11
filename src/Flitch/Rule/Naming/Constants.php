@@ -49,6 +49,7 @@ class Constants extends AbstractRule
 
         while ($file->seekTokenType(T_CONST)) {
             if (!$file->seekTokenType(T_STRING)) {
+                $file->next();
                 continue;
             }
 

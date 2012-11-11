@@ -158,21 +158,29 @@ class File extends SplDoublyLinkedList implements SeekableIterator
      *
      * Returns true on success and false if the token can not be found. Seeking
      * starts from current element. If the current token matches the given type,
-     * the position is not changed.
+     * the position is not changed. In case a stopper is supplied, the seeking
+     * will stop at the given token.
      *
      * @param  mixed   $type
      * @param  boolean $backwards
+     * @param  mixed   $stopper
      * @return boolean
      */
-    public function seekTokenType($type, $backwards = false)
+    public function seekTokenType($type, $backwards = false, $stopper = null)
     {
         $currentPosition = $this->key();
 
         while ($this->valid()) {
+            $current = $this->current()->getType();
+
             if (
-                (is_array($type) && in_array($this->current()->getType(), $type))
-                || $this->current()->getType() === $type
+                $stopper !== null && (is_array($stopper)
+                && in_array($current, $stopper)) || $current === $stopper
             ) {
+                break;
+            }
+
+            if ((is_array($type) && in_array($current, $type)) || $current === $type) {
                 return true;
             }
 

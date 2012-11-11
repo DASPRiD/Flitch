@@ -18,6 +18,28 @@ use Flitch\Rule\AbstractRule;
 class Methods extends AbstractRule
 {
     /**
+     * Magic methods to ignore.
+     *
+     * @var array
+     */
+    protected static $magicMethods = array(
+        '__construct',
+        '__destruct',
+        '__call',
+        '__callStatic',
+        '__get',
+        '__set',
+        '__isset',
+        '__unset',
+        '__sleep',
+        '__wakeup',
+        '__toString',
+        '__invoke',
+        '__set_state',
+        '__clone',
+    );
+
+    /**
      * Method name format.
      *
      * @var type
@@ -48,13 +70,17 @@ class Methods extends AbstractRule
         $file->rewind();
 
         while ($file->seekTokenType(T_FUNCTION)) {
-            if (!$file->seekTokenType(T_STRING)) {
+            if (!$file->seekTokenType(T_STRING, false, '(')) {
+                $file->next();
                 continue;
             }
 
             $token = $file->current();
 
-            if (!preg_match('(^' . $this->format . '$)', $token->getLexeme())) {
+            if (
+                !in_array($token->getLexeme(), self::$magicMethods)
+                && !preg_match('(^' . $this->format . '$)', $token->getLexeme())
+            ) {
                 $this->addViolation(
                     $file, $token->getLine(), $token->getColumn(),
                     sprintf('Method name does not match format "%s"', $this->format)

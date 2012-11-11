@@ -142,7 +142,7 @@ class Manager
             $extends = array_map('trim', explode(',', $standard['extends']));
 
             foreach ($extends as $extend) {
-                $standard = array_replace_recursive($standard, $this->loadStandard($extend));
+                $standard = array_replace_recursive($this->loadStandardFile($extend), $standard);
             }
 
             unset($standard['extends']);

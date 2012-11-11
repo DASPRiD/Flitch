@@ -19,7 +19,7 @@ class Version
     /**
      * Flitch version, should be in the format <major>.<minor>.<mini>[<suffix>]
      */
-    const VERSION = '0.1.0dev';
+    const VERSION = '0.2.0dev';
 
     /**
      * Constants of version parts

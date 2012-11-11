@@ -49,6 +49,7 @@ class Classes extends AbstractRule
 
         while ($file->seekTokenType(T_CLASS)) {
             if (!$file->seekTokenType(T_STRING)) {
+                $file->next();
                 continue;
             }
 

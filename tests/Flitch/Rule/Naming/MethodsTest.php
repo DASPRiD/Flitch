@@ -36,4 +36,34 @@ class MethodsTest extends RuleTestCase
             ),
         ));
     }
+
+    public function testNoViolationOnMagicMethods()
+    {
+        $tokenizer = new Tokenizer();
+        $file      = $tokenizer->tokenize(
+            'foo.php',
+            "<?php class foo { function __construct() {} }"
+        );
+
+        $rule = new Methods();
+        $rule->setFormat('bar');
+        $rule->check($file);
+
+        $this->assertRuleViolations($file, array());
+    }
+
+    public function testNoViolationOnClosures()
+    {
+        $tokenizer = new Tokenizer();
+        $file      = $tokenizer->tokenize(
+            'foo.php',
+            "<?php function() {}; class foo {}"
+        );
+
+        $rule = new Methods();
+        $rule->setFormat('bar');
+        $rule->check($file);
+
+        $this->assertRuleViolations($file, array());
+    }
 }

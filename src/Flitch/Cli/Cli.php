@@ -10,7 +10,7 @@
 namespace Flitch\Cli;
 
 use Flitch\File\Tokenizer;
-use Flitch\Report\Report;
+use Flitch\Report;
 use Flitch\Rule\Manager;
 use Flitch\Version;
 use RecursiveDirectoryIterator;
