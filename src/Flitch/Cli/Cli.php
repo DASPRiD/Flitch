@@ -3,7 +3,7 @@
  * Flitch
  *
  * @link      http://github.com/DASPRiD/Flitch For the canonical source repository
- * @copyright 2011-2012 Ben 'DASPRiD' Scholzen
+ * @copyright 2011-2012 Ben Scholzen 'DASPRiD'
  * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
@@ -83,7 +83,7 @@ class Cli
      */
     public function run(array $arguments)
     {
-        echo "Flitch " . Version::getVersion() . " by Ben Scholzen.\n\n";
+        echo "Flitch " . Version::getVersion() . " by Ben Scholzen 'DASPRiD'.\n\n";
 
         $parser = new ArgumentParser($arguments, array(
             array(
