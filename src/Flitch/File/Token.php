@@ -50,6 +50,13 @@ class Token
     protected $level;
 
     /**
+     * Namespace the token is in.
+     *
+     * @var string
+     */
+    protected $namespace;
+
+    /**
      * Create a new token.
      *
      * @param  mixed   $type
@@ -126,6 +133,27 @@ class Token
     public function getLevel()
     {
         return $this->level;
+    }
+
+    /**
+     * Set namespace.
+     *
+     * @param  string $namespace
+     * @return Token
+     */
+    public function setNamespace($namespace)
+    {
+        $this->namespace = $namespace;
+    }
+
+    /**
+     * Get namespace.
+     *
+     * @return string|null
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
     }
 
     /**

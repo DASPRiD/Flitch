@@ -26,5 +26,47 @@ class MustFollowPsr0 extends AbstractRule
      */
     public function check(File $file)
     {
+        $file->rewind();
+
+        while ($file->seekTokenType(T_CLASS)) {
+            if (!$file->seekTokenType(T_STRING)) {
+                $file->next();
+                continue;
+            }
+
+            $token = $file->current();
+
+            if ($token->getNamespace() !== null) {
+                $fqcn = $token->getNamespace() . '\\' . $token->getLexeme();
+            } else {
+                $fqcn = $token->getLexeme();
+            }
+
+            $psr0Compliant     = true;
+            $expectedPathParts = explode('/', str_replace(array('\\', '_'), '/', $fqcn));
+            $expectedFilename  = array_pop($expectedPathParts) . '.php';
+
+            $pathParts = explode('/', str_replace('\\', '/', realpath($file->getFilename())));
+            $filename  = array_pop($pathParts);
+
+            if ($filename !== $expectedFilename) {
+                $psr0Compliant = false;
+            } else {
+                $pathParts = array_slice($pathParts, -count($expectedPathParts));
+
+                if ($pathParts !== $expectedPathParts) {
+                    $psr0Compliant = false;
+                }
+            }
+
+            if (!$psr0Compliant) {
+                $this->addViolation(
+                    $file, $token->getLine(), $token->getColumn(),
+                    sprintf('Class name "%s" is not PSR0 compliant', $fqcn)
+                );
+            }
+
+            $file->next();
+        }
     }
 }

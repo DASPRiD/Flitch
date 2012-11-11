@@ -28,6 +28,10 @@ class Tokenizer
         $column = 1;
         $level  = 0;
 
+        $namespaceFound = false;
+        $namespace      = null;
+        $namespaceLevel = null;
+
         foreach (token_get_all($source) as $token) {
             if (is_array($token)) {
                 $type   = $token[0];
@@ -44,6 +48,25 @@ class Tokenizer
                 $column  = 1 + $token->getTrailingLineLength();
             } else {
                 $column += $token->getLength();
+            }
+
+            // Namespace handling.
+            if ($type === T_NAMESPACE) {
+                $namespaceFound = true;
+            } elseif ($namespaceFound) {
+                if (in_array($type, array(T_STRING, T_NS_SEPARATOR))) {
+                    $namespace .= $lexeme;
+                } elseif ($type === ';') {
+                    $namespaceFound = false;
+                } elseif ($type === '{') {
+                    $namespaceFound = false;
+                    $namespaceLevel = $level;
+                }
+            } elseif ($type === '}' && ($level - 1) === $namespaceLevel) {
+                $namespace      = null;
+                $namespaceLevel = null;
+            } elseif (!$namespaceFound && $namespace !== null) {
+                $token->setNamespace($namespace);
             }
 
             // Block level increment.
