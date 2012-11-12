@@ -83,7 +83,7 @@ class Cli
      */
     public function run(array $arguments)
     {
-        echo "Flitch " . Version::getVersion() . " by Ben Scholzen 'DASPRiD'.\n\n";
+        echo "Flitch " . Version::getVersion() . " by Ben Scholzen 'DASPRiD'\n\n";
 
         $parser = new ArgumentParser($arguments, array(
             array(
