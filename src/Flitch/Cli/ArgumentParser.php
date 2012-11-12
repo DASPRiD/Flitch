@@ -11,6 +11,10 @@ namespace Flitch\Cli;
 
 /**
  * Argument parser.
+ *
+ * This is a PHP port of Arg_Parser, based on version 1.7.
+ *
+ * @link https://savannah.nongnu.org/projects/arg-parser/
  */
 class ArgumentParser
 {
@@ -138,7 +142,7 @@ class ArgumentParser
         }
 
         if ($ambiguous && !$exact) {
-            $this->error = sprintf('Option "%s" is ambigious', $option);
+            $this->error = sprintf('Option "%s" is ambigiuous', $option);
             return false;
         } elseif ($index === null) {
             $this->error = sprintf('Unrecognized option "%s"', $option);
@@ -223,12 +227,13 @@ class ArgumentParser
                 $charIndex = null;
             }
 
-            if ($options[$index]['has_arg'] !== false && $charIndex > 0 && isset($option[$charIndex])) {
+            if ($options[$index]['has_arg'] !== false && $charIndex !== null && isset($option[$charIndex])) {
                 $this->options[] = array(
                     'code'     => $char,
                     'argument' => substr($option, $charIndex)
                 );
 
+                $argumentIndex++;
                 $charIndex = null;
             } elseif ($options[$index]['has_arg'] === true) {
                 if (!$argument || !isset($argument[0])) {
@@ -241,6 +246,7 @@ class ArgumentParser
                     'argument' => $argument
                 );
 
+                $argumentIndex++;
                 $charIndex = null;
             }
         }
