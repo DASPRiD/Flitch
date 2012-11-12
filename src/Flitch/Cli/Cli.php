@@ -118,7 +118,7 @@ class Cli
             return;
         }
 
-        $method  = 'analyzeFiles';
+        $method = 'analyzeFiles';
 
         foreach ($parser->getOptions() as $option) {
             switch ($option['code']) {

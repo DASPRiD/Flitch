@@ -54,6 +54,8 @@ class Cli implements ReportInterface
                 echo $violation->getSeverityName() . ': ';
                 echo $violation->getMessage() . PHP_EOL;
             }
+
+            flush();
         }
     }
 }
