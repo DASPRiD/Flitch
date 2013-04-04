@@ -42,13 +42,14 @@ abstract class AbstractRule implements RuleInterface
     /**
      * Add a violation to the current file.
      *
-     * @param  File    $file
-     * @param  integer $line
-     * @param  integer $column
-     * @param  string  $message
+     * @param  File         $file
+     * @param  integer      $line
+     * @param  integer      $column
+     * @param  string       $message
+     * @param  integer|null $severity
      * @return void
      */
-    protected function addViolation(File $file, $line, $column, $message)
+    protected function addViolation(File $file, $line, $column, $message, $severity = null)
     {
         $source = get_class($this);
 
@@ -56,6 +57,10 @@ abstract class AbstractRule implements RuleInterface
             $source = 'Flitch\\' . substr($source, strlen('Flitch\\Rule\\'));
         }
 
-        $file->addViolation(new Violation($line, $column, $this->severity, $message, $source));
+        if ($severity === null) {
+            $severity = $this->severity;
+        }
+
+        $file->addViolation(new Violation($line, $column, $severity, $message, $source));
     }
 }
