@@ -31,7 +31,7 @@ class SeparatorTest extends RuleTestCase
     public function testOnlyAllowUnixByDefault()
     {
         $rule = new Separator();
-        $rule->check($this->file);
+        $rule->visitFile($this->file);
 
         $this->assertRuleViolations($this->file, array(
             array(
@@ -53,7 +53,7 @@ class SeparatorTest extends RuleTestCase
     {
         $rule = new Separator();
         $rule->setEolStyle('unix');
-        $rule->check($this->file);
+        $rule->visitFile($this->file);
 
         $this->assertRuleViolations($this->file, array(
             array(
@@ -75,7 +75,7 @@ class SeparatorTest extends RuleTestCase
     {
         $rule = new Separator();
         $rule->setEolStyle('mac');
-        $rule->check($this->file);
+        $rule->visitFile($this->file);
 
         $this->assertRuleViolations($this->file, array(
             array(
@@ -97,7 +97,7 @@ class SeparatorTest extends RuleTestCase
     {
         $rule = new Separator();
         $rule->setEolStyle('windows');
-        $rule->check($this->file);
+        $rule->visitFile($this->file);
 
         $this->assertRuleViolations($this->file, array(
             array(

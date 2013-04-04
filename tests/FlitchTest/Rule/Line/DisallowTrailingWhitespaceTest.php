@@ -23,19 +23,19 @@ class DisallowTrailingWhitespaceTest extends RuleTestCase
         );
 
         $rule = new DisallowTrailingWhitespace();
-        $rule->check($this->file);
+        $rule->visitFile($this->file);
 
         $this->assertRuleViolations($this->file, array(
             array(
                 'line'     => 1,
                 'column'   => 0,
-                'message'  => 'Line may not contain trailing whitespace',
+                'message'  => 'Line contains trailing whitespace',
                 'source'   => 'Flitch\Line\DisallowTrailingWhitespace'
             ),
             array(
                 'line'     => 2,
                 'column'   => 0,
-                'message'  => 'Line may not contain trailing whitespace',
+                'message'  => 'Line contains trailing whitespace',
                 'source'   => 'Flitch\Line\DisallowTrailingWhitespace'
             ),
         ));

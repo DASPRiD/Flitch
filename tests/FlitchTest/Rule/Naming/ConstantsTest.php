@@ -23,9 +23,12 @@ class ConstantsTest extends RuleTestCase
             "<?php class foo { const BAR = 'baz'; const BAZ = 'bar'; }"
         );
 
+        $file->rewind();
+        $file->seekTokenType(T_CONST);
+
         $rule = new Constants();
         $rule->setFormat('BAZ');
-        $rule->check($file);
+        $rule->visitToken($file);
 
         $this->assertRuleViolations($file, array(
             array(

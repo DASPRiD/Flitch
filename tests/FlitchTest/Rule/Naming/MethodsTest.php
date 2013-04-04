@@ -23,9 +23,12 @@ class MethodsTest extends RuleTestCase
             "<?php class foo { function foo() {} function bar() {} }"
         );
 
+        $file->rewind();
+        $file->seekTokenType(T_FUNCTION);
+
         $rule = new Methods();
         $rule->setFormat('bar');
-        $rule->check($file);
+        $rule->visitToken($file);
 
         $this->assertRuleViolations($file, array(
             array(
@@ -45,9 +48,12 @@ class MethodsTest extends RuleTestCase
             "<?php class foo { function __construct() {} }"
         );
 
+        $file->rewind();
+        $file->seekTokenType(T_FUNCTION);
+
         $rule = new Methods();
         $rule->setFormat('bar');
-        $rule->check($file);
+        $rule->visitToken($file);
 
         $this->assertRuleViolations($file, array());
     }
@@ -60,9 +66,12 @@ class MethodsTest extends RuleTestCase
             "<?php function() {}; class foo {}"
         );
 
+        $file->rewind();
+        $file->seekTokenType(T_FUNCTION);
+
         $rule = new Methods();
         $rule->setFormat('bar');
-        $rule->check($file);
+        $rule->visitToken($file);
 
         $this->assertRuleViolations($file, array());
     }

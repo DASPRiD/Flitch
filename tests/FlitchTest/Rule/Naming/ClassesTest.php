@@ -23,9 +23,12 @@ class ClassesTest extends RuleTestCase
             "<?php class foo {} class bar {}"
         );
 
+        $file->rewind();
+        $file->seekTokenType(T_CLASS);
+
         $rule = new Classes();
         $rule->setFormat('bar');
-        $rule->check($file);
+        $rule->visitToken($file);
 
         $this->assertRuleViolations($file, array(
             array(

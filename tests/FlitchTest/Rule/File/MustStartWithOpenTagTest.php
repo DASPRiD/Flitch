@@ -24,7 +24,7 @@ class MustStartWithOpenTagTest extends RuleTestCase
         );
 
         $rule = new MustStartWithOpenTag();
-        $rule->check($file);
+        $rule->visitFile($file);
 
         $this->assertRuleViolations($file, array(
             array(
@@ -45,7 +45,7 @@ class MustStartWithOpenTagTest extends RuleTestCase
         );
 
         $rule = new MustStartWithOpenTag();
-        $rule->check($file);
+        $rule->visitFile($file);
 
         $this->assertRuleViolations($file, array());
     }

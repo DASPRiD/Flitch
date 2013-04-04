@@ -31,13 +31,13 @@ class MaxLengthTest extends RuleTestCase
     public function testDefaultLimits()
     {
         $rule = new MaxLength();
-        $rule->check($this->file);
+        $rule->visitFile($this->file);
 
         $this->assertRuleViolations($this->file, array(
             array(
                 'line'     => 1,
                 'column'   => 0,
-                'message'  => 'Line may not be longer than 80 characters',
+                'message'  => 'Line is longer than 80 characters',
                 'source'   => 'Flitch\Line\MaxLength'
             ),
         ));
@@ -46,14 +46,14 @@ class MaxLengthTest extends RuleTestCase
     public function testCustomLimits()
     {
         $rule = new MaxLength();
-        $rule->setLimit(120);
-        $rule->check($this->file);
+        $rule->setErrorLimit(120);
+        $rule->visitFile($this->file);
 
         $this->assertRuleViolations($this->file, array(
             array(
                 'line'     => 1,
                 'column'   => 0,
-                'message'  => 'Line may not be longer than 120 characters',
+                'message'  => 'Line is longer than 120 characters',
                 'source'   => 'Flitch\Line\MaxLength'
             ),
         ));
@@ -67,13 +67,13 @@ class MaxLengthTest extends RuleTestCase
         );
 
         $rule = new MaxLength();
-        $rule->check($file);
+        $rule->visitFile($file);
 
         $this->assertRuleViolations($file, array(
             array(
                 'line'     => 2,
                 'column'   => 0,
-                'message'  => 'Line may not be longer than 80 characters',
+                'message'  => 'Line is longer than 80 characters',
                 'source'   => 'Flitch\Line\MaxLength'
             ),
         ));
@@ -87,7 +87,7 @@ class MaxLengthTest extends RuleTestCase
         );
 
         $rule = new MaxLength();
-        $rule->check($file);
+        $rule->visitFile($file);
 
         $this->assertRuleViolations($file, array());
     }

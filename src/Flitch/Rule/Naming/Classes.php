@@ -59,7 +59,7 @@ class Classes extends AbstractRule implements TokenRuleInterface
      */
     public function visitToken(File $file)
     {
-        if (!$file->seekTokenType(T_STRING)) {
+        if (!$file->seekTokenType(T_STRING, false, '{')) {
             return;
         }
 

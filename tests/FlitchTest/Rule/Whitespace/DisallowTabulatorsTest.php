@@ -23,14 +23,17 @@ class DisallowTabulatorsTest extends RuleTestCase
             "<?php\n\t"
         );
 
+        $file->rewind();
+        $file->seekTokenType(T_WHITESPACE);
+
         $rule = new DisallowTabulators();
-        $rule->check($file);
+        $rule->visitToken($file);
 
         $this->assertRuleViolations($file, array(
             array(
                 'line'     => 2,
                 'column'   => 1,
-                'message'  => 'Tabulators are not allowed',
+                'message'  => 'Tabulator found',
                 'source'   => 'Flitch\Whitespace\DisallowTabulators'
             ),
         ));
