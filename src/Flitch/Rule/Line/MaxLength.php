@@ -12,11 +12,12 @@ namespace Flitch\Rule\Line;
 use Flitch\File\File;
 use Flitch\File\Violation;
 use Flitch\Rule\AbstractRule;
+use Flitch\Rule\FileRuleInterface;
 
 /**
  * Max line length rule.
  */
-class MaxLength extends AbstractRule
+class MaxLength extends AbstractRule implements FileRuleInterface
 {
     /**
      * Limit for emitting errors.
@@ -95,13 +96,13 @@ class MaxLength extends AbstractRule
     }
 
     /**
-     * check(): defined by Rule interface.
+     * visitFile(): defined by FileRuleInterface.
      *
-     * @see    Rule::check()
-     * @param  File  $file
+     * @see    FileRuleInterface::visitFile()
+     * @param  File $file
      * @return void
      */
-    public function check(File $file)
+    public function visitFile(File $file)
     {
         foreach ($file->getLines() as $line => $data) {
             $lineLength = iconv_strlen(

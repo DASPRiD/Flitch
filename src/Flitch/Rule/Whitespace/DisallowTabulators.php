@@ -11,34 +11,42 @@ namespace Flitch\Rule\Whitespace;
 
 use Flitch\File\File;
 use Flitch\Rule\AbstractRule;
+use Flitch\Rule\TokenRuleInterface;
 
 /**
  * Disallow tabulators rule.
  */
-class DisallowTabulators extends AbstractRule
+class DisallowTabulators extends AbstractRule implements TokenRuleInterface
 {
     /**
-     * check(): defined by Rule interface.
+     * getListenerTokens(): defined by TokenRuleInterface.
      *
-     * @see    Rule::check()
-     * @param  File  $file
+     * @see    TokenRuleInterface::getListenerTokens()
+     * @return array
+     */
+    public function getListenerTokens()
+    {
+        return array(
+            T_WHITESPACE,
+        );
+    }
+
+    /**
+     * visitToken(): defined by TokenRuleInterface.
+     *
+     * @see    TokenRuleInterface::visitToken()
+     * @param  File $file
      * @return void
      */
-    public function check(File $file)
+    public function visitToken(File $file)
     {
-        $file->rewind();
+        $token = $file->current();
 
-        while ($file->seekTokenType(T_WHITESPACE)) {
-            $token = $file->current();
-
-            if (false !== strpos($token->getLexeme(), "\t")) {
-                $this->addViolation(
-                    $file, $token->getLine(), $token->getColumn(),
-                    'Tabulators are not allowed'
-                );
-            }
-
-            $file->next();
+        if (false !== strpos($token->getLexeme(), "\t")) {
+            $this->addViolation(
+                $file, $token->getLine(), $token->getColumn(),
+                'Tabulator found'
+            );
         }
     }
 }

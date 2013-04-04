@@ -11,11 +11,12 @@ namespace Flitch\Rule\File;
 
 use Flitch\File\File;
 use Flitch\Rule\AbstractRule;
+use Flitch\Rule\FileRuleInterface;
 
 /**
  * Encoding rule.
  */
-class Encoding extends AbstractRule
+class Encoding extends AbstractRule implements FileRuleInterface
 {
     /**
      * Possible byte order marks.
@@ -75,13 +76,13 @@ class Encoding extends AbstractRule
     }
 
     /**
-     * check(): defined by Rule interface.
+     * visitFile(): defined by FileRuleInterface.
      *
-     * @see    Rule::check()
-     * @param  File  $file
+     * @see    FileRuleInterface::visitFile()
+     * @param  File $file
      * @return void
      */
-    public function check(File $file)
+    public function visitFile(File $file)
     {
         $source = $file->getSource();
 

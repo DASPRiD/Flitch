@@ -37,32 +37,38 @@ class Constants extends AbstractRule
     }
 
     /**
-     * check(): defined by Rule interface.
+     * getListenerTokens(): defined by TokenRuleInterface.
      *
-     * @see    Rule::check()
-     * @param  File  $file
+     * @see    TokenRuleInterface::getListenerTokens()
+     * @return array
+     */
+    public function getListenerTokens()
+    {
+        return array(
+            T_CONST,
+        );
+    }
+
+    /**
+     * visitToken(): defined by TokenRuleInterface.
+     *
+     * @see    TokenRuleInterface::visitToken()
+     * @param  File $file
      * @return void
      */
-    public function check(File $file)
+    public function visitToken(File $file)
     {
-        $file->rewind();
+        if (!$file->seekTokenType(T_STRING)) {
+            return;
+        }
 
-        while ($file->seekTokenType(T_CONST)) {
-            if (!$file->seekTokenType(T_STRING)) {
-                $file->next();
-                continue;
-            }
+        $token = $file->current();
 
-            $token = $file->current();
-
-            if (!preg_match('(^' . $this->format . '$)', $token->getLexeme())) {
-                $this->addViolation(
-                    $file, $token->getLine(), $token->getColumn(),
-                    sprintf('Constant name does not match format "%s"', $this->format)
-                );
-            }
-
-            $file->next();
+        if (!preg_match('(^' . $this->format . '$)', $token->getLexeme())) {
+            $this->addViolation(
+                $file, $token->getLine(), $token->getColumn(),
+                sprintf('Constant name does not match format "%s"', $this->format)
+            );
         }
     }
 }

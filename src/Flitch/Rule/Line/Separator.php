@@ -11,11 +11,12 @@ namespace Flitch\Rule\Line;
 
 use Flitch\File\File;
 use Flitch\Rule\AbstractRule;
+use Flitch\Rule\FileRuleInterface;
 
 /**
  * Line separator rule.
  */
-class Separator extends AbstractRule
+class Separator extends AbstractRule implements FileRuleInterface
 {
     /**
      * Allowed line-ending.
@@ -64,13 +65,13 @@ class Separator extends AbstractRule
     }
 
     /**
-     * check(): defined by Rule interface.
+     * visitFile(): defined by FileRuleInterface.
      *
-     * @see    Rule::check()
-     * @param  File  $file
+     * @see    FileRuleInterface::visitFile()
+     * @param  File $file
      * @return void
      */
-    public function check(File $file)
+    public function visitFile(File $file)
     {
         foreach ($file->getLines() as $line => $data) {
             if ($data['ending'] !== '' && $data['ending'] !== $this->eolChar) {

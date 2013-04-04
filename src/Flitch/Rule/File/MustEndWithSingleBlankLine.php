@@ -11,20 +11,21 @@ namespace Flitch\Rule\File;
 
 use Flitch\File\File;
 use Flitch\Rule\AbstractRule;
+use Flitch\Rule\FileRuleInterface;
 
 /**
  * Must end with single blank line rule.
  */
-class MustEndWithSingleBlankLine extends AbstractRule
+class MustEndWithSingleBlankLine extends AbstractRule implements FileRuleInterface
 {
     /**
-     * check(): defined by Rule interface.
+     * visitFile(): defined by FileRuleInterface.
      *
-     * @see    Rule::check()
+     * @see    FileRuleInterface::visitFile()
      * @param  File $file
      * @return void
      */
-    public function check(File $file)
+    public function visitFile(File $file)
     {
         $lastToken = $file->top();
 

@@ -11,20 +11,21 @@ namespace Flitch\Rule\File;
 
 use Flitch\File\File;
 use Flitch\Rule\AbstractRule;
+use Flitch\Rule\FileRuleInterface;
 
 /**
  * Must start with open tag rule.
  */
-class MustStartWithOpenTag extends AbstractRule
+class MustStartWithOpenTag extends AbstractRule implements FileRuleInterface
 {
     /**
-     * check(): defined by Rule interface.
+     * visitFile(): defined by FileRuleInterface.
      *
-     * @see    Rule::check()
-     * @param  File  $file
+     * @see    FileRuleInterface::visitFile()
+     * @param  File $file
      * @return void
      */
-    public function check(File $file)
+    public function visitFile(File $file)
     {
         if (count($file) > 0 && $file->bottom()->getType() !== T_OPEN_TAG) {
             $this->addViolation(

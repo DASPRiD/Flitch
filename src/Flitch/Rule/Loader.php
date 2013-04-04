@@ -75,12 +75,6 @@ class Loader
             return null;
         }
 
-        $rule = new $classname();
-
-        if (!$rule instanceof RuleInterface) {
-            return null;
-        }
-
-        return $rule;
+        return new $classname();
     }
 }

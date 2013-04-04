@@ -11,11 +11,12 @@ namespace Flitch\Rule\File;
 
 use Flitch\File\File;
 use Flitch\Rule\AbstractRule;
+use Flitch\Rule\TokenRuleInterface;
 
 /**
  * PHP tags rule.
  */
-class PhpTags extends AbstractRule
+class PhpTags extends AbstractRule implements TokenRuleInterface
 {
     /**
      * Map of tags to their names.
@@ -71,19 +72,31 @@ class PhpTags extends AbstractRule
     }
 
     /**
-     * check(): defined by Rule interface.
+     * getListenerTokens(): defined by TokenRuleInterface.
      *
-     * @see    Rule::check()
-     * @param  File  $file
+     * @see    TokenRuleInterface::getListenerTokens()
+     * @return array
+     */
+    public function getListenerTokens()
+    {
+        return array(
+            T_OPEN_TAG,
+            T_CLOSE_TAG,
+        );
+    }
+
+    /**
+     * visitToken(): defined by TokenRuleInterface.
+     *
+     * @see    TokenRuleInterface::visitToken()
+     * @param  File $file
      * @return void
      */
-    public function check(File $file)
+    public function visitToken(File $file)
     {
-        $file->rewind();
+        $token = $token->current();
 
-        while ($file->seekTokenType(T_OPEN_TAG)) {
-            $token = $file->current();
-
+        if ($token->getType() === T_OPEN_TAG) {
             $tag  = trim($token->getLexeme());
             $name = self::$tagMap[$tag];
 
@@ -93,19 +106,11 @@ class PhpTags extends AbstractRule
                     sprintf('PHP tag "%s" is not allowed', $tag)
                 );
             }
-
-            $file->next();
-        }
-
-        if ($this->disallowClosingTag) {
-            $file->rewind();
-
-            if ($file->seekTokenType(T_CLOSE_TAG)) {
-                $this->addViolation(
-                    $file, $token->getLine(), $token->getColumn(),
-                    'Closing PHP tag found'
-                );
-            }
+        } elseif ($this->disallowClosingTag) {
+            $this->addViolation(
+                $file, $token->getLine(), $token->getColumn(),
+                'Closing PHP tag found'
+            );
         }
     }
 }

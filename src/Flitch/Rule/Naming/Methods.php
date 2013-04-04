@@ -59,35 +59,41 @@ class Methods extends AbstractRule
     }
 
     /**
-     * check(): defined by Rule interface.
+     * getListenerTokens(): defined by TokenRuleInterface.
      *
-     * @see    Rule::check()
-     * @param  File  $file
+     * @see    TokenRuleInterface::getListenerTokens()
+     * @return array
+     */
+    public function getListenerTokens()
+    {
+        return array(
+            T_FUNCTION,
+        );
+    }
+
+    /**
+     * visitToken(): defined by TokenRuleInterface.
+     *
+     * @see    TokenRuleInterface::visitToken()
+     * @param  File $file
      * @return void
      */
-    public function check(File $file)
+    public function visitToken(File $file)
     {
-        $file->rewind();
+        if (!$file->seekTokenType(T_STRING, false, '(')) {
+            return;
+        }
 
-        while ($file->seekTokenType(T_FUNCTION)) {
-            if (!$file->seekTokenType(T_STRING, false, '(')) {
-                $file->next();
-                continue;
-            }
+        $token = $file->current();
 
-            $token = $file->current();
-
-            if (
-                !in_array($token->getLexeme(), self::$magicMethods)
-                && !preg_match('(^' . $this->format . '$)', $token->getLexeme())
-            ) {
-                $this->addViolation(
-                    $file, $token->getLine(), $token->getColumn(),
-                    sprintf('Method name does not match format "%s"', $this->format)
-                );
-            }
-
-            $file->next();
+        if (
+            !in_array($token->getLexeme(), self::$magicMethods)
+            && !preg_match('(^' . $this->format . '$)', $token->getLexeme())
+        ) {
+            $this->addViolation(
+                $file, $token->getLine(), $token->getColumn(),
+                sprintf('Method name does not match format "%s"', $this->format)
+            );
         }
     }
 }

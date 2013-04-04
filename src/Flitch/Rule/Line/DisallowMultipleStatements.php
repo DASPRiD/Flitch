@@ -11,72 +11,76 @@ namespace Flitch\Rule\Line;
 
 use Flitch\File\File;
 use Flitch\Rule\AbstractRule;
+use Flitch\Rule\TokenRuleInterface;
 
 /**
  * Disallow multiple statements rule.
  */
-class DisallowMultipleStatements extends AbstractRule
+class DisallowMultipleStatements extends AbstractRule implements TokenRuleInterface
 {
     /**
-     * check(): defined by Rule interface.
+     * getListenerTokens(): defined by TokenRuleInterface.
      *
-     * @see    Rule::check()
-     * @param  File  $file
+     * @see    TokenRuleInterface::getListenerTokens()
+     * @return array
+     */
+    public function getListenerTokens()
+    {
+        return array(
+            ';',
+        );
+    }
+
+    /**
+     * visitToken(): defined by TokenRuleInterface.
+     *
+     * @see    TokenRuleInterface::visitToken()
+     * @param  File $file
      * @return void
      */
-    public function check(File $file)
+    public function visitToken(File $file)
     {
-        $file->rewind();
-
         $previousToken = null;
 
-        while ($file->seekTokenType(';')) {
-            $currentToken = $file->current();
-            $file->next();
+        $currentToken = $file->current();
+        $file->next();
 
-            $secondStatement = false;
+        $secondStatement = false;
 
-            while ($file->valid()) {
-                $token     = $file->current();
-                $tokenType = $token->getType();
+        while ($file->valid()) {
+            $token     = $file->current();
+            $tokenType = $token->getType();
 
-                if (in_array($tokenType, array(T_COMMENT, T_DOC_COMMENT))) {
-                    $lexeme = $token->getLexeme();
+            if (in_array($tokenType, array(T_COMMENT, T_DOC_COMMENT))) {
+                $lexeme = $token->getLexeme();
 
-                    if (strpos($lexeme, '//') === 0 || strpos($lexeme, '#') === 0) {
-                        // Single line comments end the line
-                        break;
-                    } elseif ($token->getNewlineCount() > 0) {
-                        // So do block comments with new lines
-                        break;
-                    }
-                } elseif ($tokenType === T_WHITESPACE) {
-                    if ($token->getNewlineCount() > 0) {
-                        // Whitespace new lines are fine as well
-                        break;
-                    }
-                } else {
-                    $secondStatement = true;
+                if (strpos($lexeme, '//') === 0 || strpos($lexeme, '#') === 0) {
+                    // Single line comments end the line
+                    break;
+                } elseif ($token->getNewlineCount() > 0) {
+                    // So do block comments with new lines
                     break;
                 }
-
-                $file->next();
-            }
-
-            if ($previousToken !== null) {
-
-
-                if ($currentToken->getLine() === $previousToken->getLine()) {
-                    $this->addViolation(
-                        $file, $currentToken->getLine(), $currentToken->getColumn(),
-                        'Found multiple statements on same line'
-                    );
+            } elseif ($tokenType === T_WHITESPACE) {
+                if ($token->getNewlineCount() > 0) {
+                    // Whitespace new lines are fine as well
+                    break;
                 }
+            } else {
+                $secondStatement = true;
+                break;
             }
-
-            $previousToken = $currentToken;
 
             $file->next();
+        }
+
+        if ($previousToken !== null) {
+            if ($currentToken->getLine() === $previousToken->getLine()) {
+                $this->addViolation(
+                    $file, $currentToken->getLine(), $currentToken->getColumn(),
+                    'Found multiple statements on same line'
+                );
+            }
         }
     }
 }

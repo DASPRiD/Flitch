@@ -15,7 +15,7 @@ use Flitch\File\Violation;
 /**
  * Abstract rule.
  */
-abstract class AbstractRule implements RuleInterface
+abstract class AbstractRule
 {
     /**
      * Severity to use for errors.
@@ -32,7 +32,7 @@ abstract class AbstractRule implements RuleInterface
      */
     public function setSeverity($severity)
     {
-        if (null !== ($severity = Violation::getSeverityFromString($options['severity']))) {
+        if (null !== ($severity = Violation::getSeverityFromString($severity))) {
             $this->severity = $severity;
         }
 

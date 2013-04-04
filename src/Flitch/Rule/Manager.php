@@ -53,6 +53,13 @@ class Manager
     protected $rules = array();
 
     /**
+     * Tokens to listen to.
+     *
+     * @var array
+     */
+    protected $listenerTokens = array();
+
+    /**
      * Create a new rule manager.
      *
      * @param  string $globalPath
@@ -78,7 +85,23 @@ class Manager
     public function check(File $file)
     {
         foreach ($this->rules as $rule) {
-            $rule->check($file);
+            if ($rule instanceof FileRuleInterface) {
+                $rule->visitFile($file);
+            }
+        }
+
+        while ($file->valid()) {
+            $position  = $file->key();
+            $tokenType = $file->current()->getType();
+
+            if (isset($this->listenerTokens[$tokenType])) {
+                foreach ($this->listenerTokens[$tokenType] as $ruleName) {
+                    $this->rules[$ruleName]->check($file);
+                    $file->seek($position);
+                }
+            }
+
+            $file->next();
         }
     }
 
@@ -103,6 +126,16 @@ class Manager
 
                 if (method_exists($rule, $setter)) {
                     $rule->{$setter}($value);
+                }
+            }
+
+            if ($rule instanceof TokenRuleInterface) {
+                foreach ($rule->getListenerTokens() as $listenerToken) {
+                    if (!isset($this->listenerTokens[$listenerToken])) {
+                        $this->listenerTokens[$listenerToken] = array();
+                    }
+
+                    $this->listenerTokens[$listenerToken][] = $ruleName;
                 }
             }
 

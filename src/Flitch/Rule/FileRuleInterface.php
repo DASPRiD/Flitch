@@ -12,15 +12,17 @@ namespace Flitch\Rule;
 use Flitch\File\File;
 
 /**
- * Rule interface.
+ * File rule interface.
+ *
+ * Rules implementing this interface will be visited for ever file.
  */
-interface RuleInterface
+interface FileRuleInterface
 {
     /**
      * Check a given file for rule violations.
      *
-     * @param  File  $file
+     * @param  File $file
      * @return void
      */
-    public function check(File $file);
+    public function visitFile(File $file);
 }
